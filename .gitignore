@@ -1,0 +1,25 @@
+# Unity-generated state and build output
+/Library/
+/Temp/
+/obj/
+/Logs/
+/UserSettings/
+/MemoryCaptures/
+/Builds/
+/Playtest/
+
+# IDE and generated project files
+/.vs/
+/.vscode/
+*.csproj
+*.sln
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.opendb
+*.VC.db
+
+# Release archives are generated deliverables, not source
+*.zip
+*.rar
