@@ -2,6 +2,8 @@ using System.Collections;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace RiffleCreek
 {
@@ -16,9 +18,26 @@ namespace RiffleCreek
         {
             report.AppendLine((valid?"PASS: ":"FAIL: ")+text);if(!valid)failed=true;
         }
+        void CheckUrpRendering()
+        {
+            Check(GraphicsSettings.currentRenderPipeline is UniversalRenderPipelineAsset, "Universal Render Pipeline is active in the Windows player");
+            string[] shaders = { "Creek/Matte", "Creek/Water", "Creek/Glow" };
+            foreach (var name in shaders)
+            {
+                var shader = Shader.Find(name);
+                Check(shader != null && shader.isSupported, name + " is available and supported");
+            }
+            var unsupported = false;
+            foreach (var renderer in FindObjectsByType<Renderer>(FindObjectsInactive.Include))
+                foreach (var material in renderer.sharedMaterials)
+                    if (material != null && (material.shader == null || !material.shader.isSupported)) unsupported = true;
+            Check(!unsupported, "All scene renderer materials use supported shaders");
+        }
+
         IEnumerator Start()
         {
             game=GetComponent<CreekGame>();game.VerificationDrive=true;
+            CheckUrpRendering();
             dir=Path.GetFullPath(Path.Combine(Application.dataPath,"../../../Playtest"));Directory.CreateDirectory(dir);
             report.AppendLine("Front riffles and separate Work/Wash: stationary button samples, no gestures.");
             yield return new WaitForSeconds(.6f);yield return Capture("01-fresh-scoop.png");

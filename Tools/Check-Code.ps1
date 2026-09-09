@@ -7,6 +7,13 @@ $mono = Join-Path $EditorData 'MonoBleedingEdge\bin\mono.exe'
 $compiler = Join-Path $EditorData 'MonoBleedingEdge\lib\mono\4.5\csc.exe'
 $references = @(Get-ChildItem -LiteralPath (Join-Path $EditorData 'Managed\UnityEngine') -Filter '*.dll' | ForEach-Object { '/r:"' + $_.FullName + '"' })
 $references += '/r:"' + (Join-Path $EditorData 'NetStandard\ref\2.1.0\netstandard.dll') + '"'
+$urpAssemblies = @(
+    'Unity.RenderPipelines.Core.Runtime.dll',
+    'Unity.RenderPipelines.Core.Runtime.Shared.dll',
+    'Unity.RenderPipelines.Universal.Config.Runtime.dll',
+    'Unity.RenderPipelines.Universal.Runtime.dll'
+)
+$references += $urpAssemblies | ForEach-Object { '/r:"' + (Join-Path (Join-Path $project 'Library\ScriptAssemblies') $_) + '"' }
 $sources = @(Get-ChildItem -LiteralPath 'Assets\Creek' -Recurse -Filter '*.cs' | ForEach-Object { '"' + $_.FullName + '"' })
 @('/nologo','/nostdlib','/target:library','/langversion:latest','/define:UNITY_EDITOR','/out:Logs/CodeCheck/Riffle.dll') + $references + $sources | Set-Content -LiteralPath 'Logs\CodeCheck\compile.rsp'
 & $mono $compiler /noconfig '@Logs/CodeCheck/compile.rsp'

@@ -35,7 +35,7 @@ namespace RiffleCreek
                 grains[i]=Geometry.MeshObject(((MaterialKind)kind).ToString(),root,pebble,kind==3?cleanGold:grainMaterials[kind],Vector3.zero).transform;
                 grains[i].gameObject.SetActive(false);
             }
-            glintMaterial=Geometry.Mat("Soft gold glint","#FFF2BF",Shader.Find("Unlit/Color"));
+            glintMaterial=Geometry.Mat("Soft gold glint","#FFF2BF",Shader.Find("Creek/Glow"));
             glintMesh=Geometry.Make("Four-point glint",new[]{Vector3.zero,new Vector3(0,0,1),new Vector3(.17f,0,.17f),new Vector3(.7f,0,0),new Vector3(.17f,0,-.17f),new Vector3(0,0,-1),new Vector3(-.17f,0,-.17f),new Vector3(-.7f,0,0),new Vector3(-.17f,0,.17f)},new[]{0,1,2,0,2,3,0,3,4,0,4,5,0,5,6,0,6,7,0,7,8,0,8,1});
             for(int i=0;i<glints.Length;i++) {glints[i]=Geometry.MeshObject("Gold ready glint",root,glintMesh,glintMaterial,Vector3.zero).transform;glints[i].localScale=Vector3.zero;}
             int[] flowTriangles=new int[12*6];

@@ -80,7 +80,8 @@ namespace RiffleCreek.Editor
 
         public static void BuildCurrent()
         {
-            EditorSceneManager.OpenScene("Assets/Creek/Scenes/AlderCreek.unity");
+                        RiffleUrpMigration.VerifyConfiguration();
+EditorSceneManager.OpenScene("Assets/Creek/Scenes/AlderCreek.unity");
             SimulationChecks.Run();
             Directory.CreateDirectory("Builds/Windows");
             var result=BuildPipeline.BuildPlayer(new BuildPlayerOptions {
