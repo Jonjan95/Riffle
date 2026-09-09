@@ -99,7 +99,7 @@ namespace RiffleCreek.Editor
             for(int i=0;i<600;i++)lip.Step(Held(true),1f/60,0,0);
             Check(lip.Grains[88].Exit>0 && lip.Stones==9,"Pour assists an already worked front-lip stone while leaving bulk stones alone");
             #if UNITY_EDITOR
-            var pan=UnityEngine.Object.FindFirstObjectByType<PanView>();
+            var pan=UnityEngine.Object.FindAnyObjectByType<PanView>();
             var meshes=pan.riffleAccent.GetComponentsInChildren<MeshFilter>();
             float maxZ=-10;foreach(var filter in meshes)foreach(var vertex in filter.sharedMesh.vertices)maxZ=Mathf.Max(maxZ,pan.transform.InverseTransformPoint(filter.transform.TransformPoint(vertex)).z);
             Check(meshes.Length>0 && maxZ<-.9f,"Saved riffle mesh vertices physically occupy only the front sector");

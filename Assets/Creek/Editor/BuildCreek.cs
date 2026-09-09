@@ -69,7 +69,7 @@ namespace RiffleCreek.Editor
         public static void BuildWorkingPan()
         {
             var scene=EditorSceneManager.OpenScene("Assets/Creek/Scenes/AlderCreek.unity");
-            var pan=UnityEngine.Object.FindFirstObjectByType<PanView>();
+            var pan=UnityEngine.Object.FindAnyObjectByType<PanView>();
             // Edit the existing mesh group's transform. Preserve the saved diorama and camera.
             pan.riffleAccent.localRotation=Quaternion.Euler(0,180,0);
             pan.riffleAccent.name="Front working riffles • 108 degree sector";

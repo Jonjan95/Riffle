@@ -1,4 +1,4 @@
-param([string]$EditorData = 'C:\Program Files\Unity\Hub\Editor\6000.1.4f1\Editor\Data')
+param([string]$EditorData = 'C:\Program Files\Unity\Hub\Editor\6000.6.0f1\Editor\Data')
 $ErrorActionPreference = 'Stop'
 $project = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $project

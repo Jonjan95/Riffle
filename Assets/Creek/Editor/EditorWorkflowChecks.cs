@@ -18,7 +18,7 @@ namespace RiffleCreek.Editor
                 throw new Exception("Riffle Play Mode startup scene is not configured.");
 
             var scene = EditorSceneManager.OpenScene(RiffleEditorBootstrap.StartupScenePath, OpenSceneMode.Single);
-            var game = UnityEngine.Object.FindFirstObjectByType<CreekGame>();
+            var game = UnityEngine.Object.FindAnyObjectByType<CreekGame>();
             if (!scene.isLoaded || game == null || game.sceneCamera == null || game.pan == null || game.diorama == null)
                 throw new Exception("Saved Riffle startup scene is incomplete.");
 

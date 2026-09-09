@@ -27,7 +27,7 @@ Space works anywhere in the focused game. Mouse holds begin on the pan and remai
 
 ## Project and rebuild
 
-Open **Assets/Creek/Scenes/AlderCreek.unity** in **Unity 6000.1.4f1**. The pan geometry is already reoriented in the saved scene. **Tools/Build-Windows.ps1** checks and builds that scene without regenerating it. **Tools/Check-Code.ps1** compiles and checks the standalone simulation against the installed Unity libraries.
+Open **Assets/Creek/Scenes/AlderCreek.unity** in **Unity 6000.6.0f1**. The pan geometry is already reoriented in the saved scene. **Tools/Build-Windows.ps1** checks and builds that scene without regenerating it. **Tools/Check-Code.ps1** compiles and checks the standalone simulation against the installed Unity libraries.
 
 **Riffle → Reorient saved pan and build** idempotently sets the saved riffle group's rotation to 180 degrees. **Riffle → Create fresh creek scene** intentionally regenerates the procedural scene and replaces generated art; it is unnecessary for this revision. New procedural pans also place riffles at the front.
 
