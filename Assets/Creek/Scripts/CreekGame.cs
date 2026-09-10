@@ -65,8 +65,7 @@ namespace RiffleCreek
             }
             if(!VerificationDrive)
             {
-                if(Input.GetKeyDown(KeyCode.E)) { if(Simulation.Ready)Collect(); else if(!Simulation.Loaded)Scoop(); }
-                TickActions(input.Read(sceneCamera,pan.transform,ui.BlocksPointer(),false),dt);
+                TickActions(input.Read(sceneCamera,pan.transform,ui.BlocksPointer(),false),dt,collectPressed:Input.GetKeyDown(KeyCode.E));
             }
             pan.Render(Simulation,Intent,Progress,dt);
             diorama.Animate(Progress,Intent,Simulation.Loaded&&!Simulation.Ready,dt);
@@ -74,9 +73,11 @@ namespace RiffleCreek
             ToastTime=Mathf.Max(0,ToastTime-dt); GoldGainTime=Mathf.Max(0,GoldGainTime-dt);
             AnnounceReady();
         }
-        public void TickActions(PanIntent manual,float dt,bool blocked=false)
+        public void TickActions(PanIntent manual,float dt,bool blocked=false,bool collectPressed=false)
         {
-            if(blocked || Paused || ShowHelp) { Intent=default; return; }
+            if(blocked || Paused || ShowHelp) { Intent=default; Assistance.Resolve(Simulation,Progress,default,dt,true); return; }
+            // The keyboard collection command is handled before assistance, with no reveal-delay gate.
+            if(collectPressed) { if(Simulation.Ready)Collect(); else if(!Simulation.Loaded)Scoop(); }
             ApplyPanActions(Assistance.Resolve(Simulation,Progress,manual,dt),dt);
             AnnounceReady();
             if(Assistance.ShouldCollect(Simulation,Progress,dt))Collect();
@@ -150,7 +151,7 @@ namespace RiffleCreek
             Intent=intent; Simulation.Step(intent,dt,Progress.PanLevel,Progress.RiffleLevel);
         }
         public string Stage => !Simulation.Loaded?"A fresh start":Simulation.Ready?"Gold ready — collect":Simulation.NeedsWork&&Intent.Work==0?"Loosen what remains":Intent.Wash>0?(Simulation.Sediment<.18f?"Gold coming through":"Washing loose sediment"):Intent.Work>0?(Simulation.Looseness<.98f||Simulation.Stones>0?"Loosening and separating":"Ready to wash"):Simulation.Looseness<.65f||Simulation.Stones>2?"Hold LMB to work":"Hold Space / RMB to wash";
-        public string Hint => Simulation.Ready ? (Progress.AutomationOn(2)?"Take a moment for the gold. The catch tray will collect shortly.":"Press E to collect gold and prepare the next scoop. Leftover stones are fine.") :
+        public string Hint => Simulation.Ready ? (Progress.AutomationOn(2)?"The catch tray collects after the glint. Press E to collect now.":"Press E to collect gold and prepare the next scoop. Leftover stones are fine.") :
             Progress.AutomationOn(0)&&Progress.AutomationOn(1) ? "Your pan is assisted. Hold either action to take over; release to let the camp help." :
             Progress.AutomationOn(0) ? "Auto Work prepares the dirt. Hold Space / RMB to wash; E collects." :
             Progress.AutomationOn(1) ? "Hold LMB to prepare the dirt. Release for Auto Wash; E collects." :

@@ -69,6 +69,29 @@ namespace RiffleCreek
                 yield return null;
             }
             Check(game.Progress.CollectedPans>=completed+3,"Fully assisted pan completes three more loads without manual input");
+            // Exercise the same command path as the E key while all helpers are still enabled.
+            game.TickActions(new PanIntent{Wash=1},.01f);
+            Check(game.Intent.Wash==1&&game.Intent.Work==0,"Manual Wash instantly overrides enabled assistance");
+            game.TickActions(new PanIntent{Work=1},.01f);
+            Check(game.Intent.Work==1&&game.Intent.Wash==0,"Manual Work instantly overrides enabled assistance");
+            for(int i=0;i<3000&&!game.Simulation.Ready;i++)game.TickActions(default,.01f);
+            Check(game.Simulation.Ready,"Assistance reaches readiness before testing manual collection");
+            Check(game.Assistance.Activity=="Collect / gold revealed","The live activity strip shows Collect as soon as gold is ready");
+            yield return Capture("10-collect-status.png");
+            int manualGold=game.Progress.Gold, manualValue=game.Simulation.GoldValue, manualPans=game.Progress.CollectedPans;
+            game.TickActions(default,.01f,collectPressed:true);
+            Check(game.Progress.Gold==manualGold+manualValue&&game.Progress.CollectedPans==manualPans+1,
+                "E command collects immediately during the automatic reveal delay");
+            game.TickActions(default,.01f,collectPressed:true);
+            Check(game.Progress.CollectedPans==manualPans+1,"Repeated E on the fresh scoop cannot duplicate payment");
+            for(int i=0;i<3000&&!game.Simulation.Ready;i++)game.TickActions(default,.01f);
+            int beforePause=game.Progress.CollectedPans;
+            for(int i=0;i<100;i++)game.TickActions(default,.01f,blocked:true,collectPressed:true);
+            Check(game.Progress.CollectedPans==beforePause&&game.Assistance.Activity=="Waiting / paused","Blocked game freezes collection and shows Waiting");
+            float reveal=0;
+            while(game.Progress.CollectedPans==beforePause&&reveal<1) {game.TickActions(default,.01f);reveal+=.01f;}
+            Check(reveal>=.58f&&reveal<=.62f&&game.Progress.CollectedPans==beforePause+1,
+                "Runtime Auto Collect finishes its 0.6 second reveal after resuming");
             game.ToggleAutomation(0);game.ToggleAutomation(1);game.ToggleAutomation(2);
             game.TickActions(new PanIntent{Work=1},.05f);
             Check(game.Intent.Work==1&&game.Intent.Wash==0,"Manual Work survives all automation purchases");

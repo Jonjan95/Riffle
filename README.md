@@ -25,7 +25,7 @@ The pan accelerates Work and Wash; riffles improve settling; richer scoops add 3
 
 **Auto Work (80 gold)** requires all three tools at level 1. **Auto Wash (220 gold)** requires Auto Work and all tools at level 2. **Auto Collect (190 gold)** requires Auto Wash and all tools at level 3.
 
-Each helper has a simple **ON/OFF** button in Assistance. Manual holds take priority. With both action helpers on, the pan alternates preparation and washing using the current sediment state. Auto Collect leaves the revealed gold visible for 2.2 seconds before collecting through the same readiness-guarded command.
+Each helper has a simple **ON/OFF** button in Assistance. Manual holds take priority. With both action helpers on, the pan alternates preparation and washing using the current sediment state. Auto Collect leaves the revealed gold visible for 0.6 seconds before collecting through the same readiness-guarded command.
 
 A first-pan crate, tool rack, sluice screen, crank, water header and catch tray gradually improve the camp. At 40 lifetime gold, the existing sluice begins flowing and pre-screens a little compacted dirt from each new scoop. It produces no passive income.
 

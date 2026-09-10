@@ -84,6 +84,7 @@ namespace RiffleCreek.Editor
             p.ToggleAutomation(1);
             sim=new PanSimulation();sim.Scoop(0);
             Check(!a.Resolve(sim,p,default,.05f).Working,"Turning off Work and Wash immediately restores manual panning");
+            ResponsivenessChecks();
             SaveChecks();
             VariationChecks();
             report.AppendLine(ChapterBalance.Simulate(false));
@@ -95,6 +96,86 @@ namespace RiffleCreek.Editor
             #else
             Console.WriteLine(report.ToString());
             #endif
+        }
+        static void ResponsivenessChecks()
+        {
+            foreach(int fps in new[]{30,60,120})
+            {
+                float dt=1f/fps;
+                var p=Equipped(3);var s=new PanSimulation();s.Scoop(3,0,true);var a=new PanAutomation();
+                a.Resolve(s,p,default,dt);
+                var intent=a.Resolve(s,p,new PanIntent{Wash=1},dt);
+                Check(intent.Wash==1&&intent.Work==0&&a.Activity=="Wash / your hands","Wash overrides running Auto Work in the same frame at "+fps+" Hz");
+                for(int i=0;i<30*fps&&s.CompactedSediment>.001f;i++)s.Step(new PanIntent{Work=1},dt,3,3);
+                a.Resolve(s,p,new PanIntent{Work=1},dt);
+                intent=a.Resolve(s,p,default,dt);
+                Check(intent.Wash==1&&intent.Work==0,"Releasing manual Work resumes the needed Wash immediately at "+fps+" Hz");
+                intent=a.Resolve(s,p,new PanIntent{Work=1},dt);
+                Check(intent.Work==1&&intent.Wash==0&&a.Activity=="Work / your hands","Work overrides running Auto Wash in the same frame at "+fps+" Hz");
+                intent=a.Resolve(s,p,new PanIntent{Work=1,Wash=1},dt);
+                Check(intent.Work==1&&intent.Wash==1,"Explicit combined manual holds remain unfiltered at "+fps+" Hz");
+                for(int i=0;i<30*fps&&!s.Ready;i++)s.Step(new PanIntent{Wash=1},dt,3,3);
+                Check(s.Ready,"Prepared timing test reaches real gold readiness at "+fps+" Hz");
+                float elapsed=0;bool collected=false;
+                while(!collected&&elapsed<1) {collected=a.ShouldCollect(s,p,dt);elapsed+=dt;}
+                Check(collected&&elapsed>=.6f-.0001f&&elapsed<=.6f+dt+.0001f,"Auto Collect waits 0.6 seconds within one frame at "+fps+" Hz");
+                Check(a.Activity=="Collect / gold revealed","Status shows Collect during the reveal at "+fps+" Hz");
+                a.ShouldCollect(s,p,.05f);
+                p.ToggleAutomation(2);a.ShouldCollect(s,p,dt);p.ToggleAutomation(2);
+                for(int i=0;i<30*fps;i++)a.ShouldCollect(s,p,dt,true);
+                Check(!a.ShouldCollect(s,p,dt),"Disabling collection clears its timer and pauses add no elapsed time at "+fps+" Hz");
+                int gold=s.Collect();s.Scoop(3,1,true);
+                Check(gold>0&&!a.ShouldCollect(s,p,dt),"A new scoop cannot inherit the previous collection timer at "+fps+" Hz");
+
+                a=new PanAutomation();s=new PanSimulation();s.Scoop(3,0,true);
+                for(int i=0;i<30*fps;i++)
+                {
+                    intent=a.Resolve(s,p,default,dt);if(intent.Wash>0)break;
+                    s.Step(intent,dt,3,3);
+                }
+                // Move the material to a real plateau while the newly switched controller's phase clock is zero.
+                for(int i=0;i<30*fps&&!s.NeedsWork;i++)s.Step(new PanIntent{Wash=1},dt,3,3);
+                intent=a.Resolve(s,p,default,dt);
+                Check(s.NeedsWork&&intent.Work==1&&intent.Wash==0,"Clear Wash plateau bypasses the phase guard at "+fps+" Hz");
+                a.Resolve(s,p,new PanIntent{Wash=1},dt);
+                intent=a.Resolve(s,p,default,dt);
+                Check(intent.Work==1&&intent.Wash==0,"Releasing manual Wash resumes needed Work without a handoff delay at "+fps+" Hz");
+
+                foreach(int tier in new[]{2,3})
+                {
+                    float auto=TimeLoads(tier,fps,false), active=TimeLoads(tier,fps,true);
+                    Check(active<auto&&auto<active*1.3f,"Attentive manual route stays modestly faster than assistance at tier "+tier+" / "+fps+" Hz");
+                    report.AppendLine("TIMING tier "+tier+" / "+fps+" Hz: assisted "+auto.ToString("F3")+" s/load; attentive manual "+active.ToString("F3")+" s/load (10 seeded loads).");
+                }
+            }
+        }
+        static float TimeLoads(int tier,int fps,bool active)
+        {
+            var p=Equipped(tier);float elapsed=0,dt=1f/fps;
+            for(int load=0;load<10;load++)
+            {
+                var s=new PanSimulation();s.Scoop(tier,load,true);var a=new PanAutomation();
+                float phase=0;int lastAction=0;
+                for(int frame=0;frame<60*fps&&!s.Ready;frame++)
+                {
+                    var intent=active ? new PanIntent{Work=s.CompactedSediment>.045f?1:0,Wash=s.CompactedSediment<=.045f?1:0} : a.Resolve(s,p,default,dt);
+                    int action=intent.Work>0?1:2;
+                    if(!active&&lastAction!=0&&action!=lastAction&&phase<.15f-dt-.0001f)
+                        throw new Exception("Assistance flickered between phases");
+                    if(action!=lastAction)phase=0;
+                    phase+=dt;lastAction=action;
+                    s.Step(intent,dt,tier,tier);elapsed+=dt;
+                }
+                if(!s.Ready)throw new Exception("Timing route stalled");
+                if(!active&&tier==3)
+                {
+                    bool collected=false;
+                    for(int i=0;i<fps&&!collected;i++) {collected=a.ShouldCollect(s,p,dt);elapsed+=dt;}
+                    if(!collected)throw new Exception("Auto Collect timing route stalled");
+                }
+                s.Collect();
+            }
+            return elapsed/10;
         }
         static void CheckNotCollect(PanAutomation a,PanSimulation s,Progression p)
         { if(a.ShouldCollect(s,p,.05f))throw new Exception("Premature automatic collection"); }
