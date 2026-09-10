@@ -77,6 +77,7 @@ namespace RiffleCreek
             for(int i=0;i<3000&&!game.Simulation.Ready;i++)game.TickActions(default,.01f);
             Check(game.Simulation.Ready,"Assistance reaches readiness before testing manual collection");
             Check(game.Assistance.Activity=="Collect / gold revealed","The live activity strip shows Collect as soon as gold is ready");
+            yield return new WaitForSeconds(.20f);
             yield return Capture("10-collect-status.png");
             int manualGold=game.Progress.Gold, manualValue=game.Simulation.GoldValue, manualPans=game.Progress.CollectedPans;
             game.TickActions(default,.01f,collectPressed:true);

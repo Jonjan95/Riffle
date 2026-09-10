@@ -100,6 +100,7 @@ namespace RiffleCreek
             for(int i=0;i<3;i++)
             {
                 float y=287+i*92;
+                Box(new Rect(1270,y-5,286,83),new Color(.92f,.90f,.82f));
                 if(shopTab==0)
                 {
                     Label(1279,y,180,25,Progression.UpgradeNames[i],body);
@@ -116,9 +117,10 @@ namespace RiffleCreek
                 {
                     Label(1279,y,175,25,Progression.AssistNames[i],body);
                     bool owned=p.HasAutomation(i), available=p.AutomationAvailable(i);
+                    if(owned)Label(1279,y+61,268,21,p.AutomationOn(i)?"ENABLED / your hands take priority":"PAUSED / tap OFF to enable",small,p.AutomationOn(i)?teal:muted);
                     string[] help={"Prepares dirt. You wash and collect.","Alternates with Work. You collect.","Collects revealed gold; loads again."};
                     Label(1279,y+28,268,35,help[i],small,muted);
-                    if(!owned)Label(1279,y+64,268,21,available?"Ready to build":p.AutomationRequirement(i),small,available?teal:muted);
+                    if(!owned)Label(1279,y+61,268,21,available?"Ready to build":p.AutomationRequirement(i),small,available?teal:muted);
                     if(Button(new Rect(1453,y-2,94,33),owned?(p.AutomationOn(i)?"ON":"OFF"):p.AutomationCost(i)+" g",
                         owned || available&&p.Gold>=p.AutomationCost(i),owned&&p.AutomationOn(i)))
                     { if(owned)game.ToggleAutomation(i);else game.BuyAutomation(i); }
@@ -143,8 +145,10 @@ namespace RiffleCreek
             Meter(49,647,"Layered",sim.Stratification,teal);
             Meter(49,680,"Settled",sim.Capture,gold);
             if(sim.Loaded)Label(34,745,350,24,sim.Stones+" stones  /  "+Mathf.RoundToInt(sim.Sediment*100)+"% silt  /  "+Mathf.RoundToInt(sim.BlackSand*100)+"% black sand",small,cream);
-            Box(new Rect(535,126,470,26),teal);
-            Label(550,131,443,21,game.Assistance.Activity,small,cream);
+            Box(new Rect(535,126,430,26),teal);
+            GUI.color=game.Assistance.Activity.StartsWith("Waiting")?new Color(.68f,.78f,.70f):gold;
+            GUI.DrawTexture(new Rect(546,135,7,7),circle);GUI.color=Color.white;
+            Label(562,131,390,21,game.Assistance.Activity,small,cream);
             WorldTag(new Vector3(-5.3f,.8f,-4.4f),sim.Ready?"GOLD READY  /  [E] COLLECT":sim.Sediment<.3f?"BLACK SAND  /  GOLD SETTLING":"FRONT  /  WORKING RIFFLES",sim.Ready||game.Intent.Working);
             if(game.ToastTime>0)
             {

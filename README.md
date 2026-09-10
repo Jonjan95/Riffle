@@ -55,3 +55,5 @@ Open **Assets/Creek/Scenes/AlderCreek.unity** in Unity 6000.6.0f1. The saved sce
 Verification runs use unique saves under **Playtest/Verification**, never the normal player save. They must use a visible game window for useful screenshots. Logs and captures are local, ignored build artifacts.
 
 Main responsibilities remain: `PanInput` maps held controls, `PanSimulation` processes one pan, `PanAutomation` supplies ordinary intents, `CreekGame` routes actions and collection, `Progression` owns prices/unlocks, `SaveStore` handles local persistence, and `PanView` / `Diorama` / `CampProgressView` render the result.
+
+Presentation notes and before/after capture locations: [Alder Creek polish](Docs/POLISH.md).

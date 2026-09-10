@@ -31,11 +31,15 @@ Shader "Creek/Water"
             half4 frag(Varyings input) : SV_Target
             {
                 float time = _Time.y;
-                float wave = sin(input.positionWS.x * 2.3 + input.positionWS.z * 3.4 + time * .8)
-                           + sin(input.positionWS.z * 8.0 - input.positionWS.x * 1.7 + time * 1.3) * .35;
-                half ribbon = smoothstep(.92, 1.25, wave) * .10;
-                half3 color = _Color.rgb + half3(.11, .18, .14) * ribbon
-                            + sin(input.positionWS.z * 2.5 + time * .65) * .024;
+                float2 p = input.positionWS.xz;
+                // Broad flowing bands with a few quiet crest lines; no refraction or glitter noise.
+                float bend = sin(p.x * .42 + time * .18) * .32;
+                float current = p.x * .52 - time * .42 + sin(p.y * 2.2) * .30;
+                float wave = sin(current) * .5 + .5;
+                float crest = pow(saturate(sin(p.y * 7.0 + bend + sin(current) * .55)), 18);
+                float broken = smoothstep(.15, .8, sin(p.x * 2.1 - time * .55 + p.y));
+                half3 color = _Color.rgb * lerp(.92, 1.045, wave)
+                            + half3(.13, .19, .17) * crest * broken * .26;
                 return half4(color, 1);
             }
             ENDHLSL

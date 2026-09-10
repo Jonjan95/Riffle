@@ -76,7 +76,7 @@ namespace RiffleCreek
                 for(int i=0;i<60;i++) {game.ApplyPanActions(default,1f/60);if(i%4==0)yield return null;}
                 if(load==0)yield return new WaitForSeconds(.5f);
                 if(load==0)Check(game.Simulation.Agitation==0&&Mathf.Abs(game.pan.ForwardTilt)<.20f,"Release settles the pan toward rest");
-                int washFrames=0;
+                int washFrames=0;bool capturedBlackSand=false;
                 while(!game.Simulation.Ready&&washFrames<3600)
                 {
                     bool pause=load==3&&washFrames%180>130;
@@ -93,6 +93,8 @@ namespace RiffleCreek
                         yield return Capture("03-hold-pour.png");
                     }
                     if(load==0&&washFrames==180)yield return Capture("04-concentrate.png");
+                    if(load==0&&!capturedBlackSand&&game.Simulation.BlackSand<.5f&&!game.Simulation.Ready)
+                    {capturedBlackSand=true;yield return Capture("10-black-sand-pocket.png");}
                 }
                 Check(game.Simulation.Ready,cases[load]+": collectable after "+(workFrames/60f).ToString("F1")+"s work and "+(washFrames/60f).ToString("F1")+"s wash");
                 if(load==0) {float goldZ=0;for(int i=140;i<154;i++)goldZ+=game.Simulation.Grains[i].Position.y/14;Check(goldZ<-1.3f && game.pan.blackBed.localPosition.z<-1.3f,"Gold and black sand gather just inside the front working riffles");}

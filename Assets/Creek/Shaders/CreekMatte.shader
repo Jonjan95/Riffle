@@ -1,6 +1,6 @@
 Shader "Creek/Matte"
 {
-    Properties { _Color ("Color", Color) = (1,1,1,1) _ReceiveShadows ("Shadow softness", Range(0,1)) = 1 }
+    Properties { _Color ("Color", Color) = (1,1,1,1) _ReceiveShadows ("Shadow softness", Range(0,1)) = 1 _Sheen ("Broad satin highlight", Range(0,0.25)) = 0 }
     SubShader
     {
         Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque" "Queue"="Geometry" }
@@ -17,7 +17,7 @@ Shader "Creek/Matte"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
             CBUFFER_START(UnityPerMaterial)
-                float4 _Color; float _ReceiveShadows;
+                float4 _Color; float _ReceiveShadows; float _Sheen;
             CBUFFER_END
 
             struct Attributes { float4 positionOS : POSITION; float3 normalOS : NORMAL; };
@@ -25,14 +25,14 @@ Shader "Creek/Matte"
             {
                 float4 positionCS : SV_POSITION;
                 float3 normalWS : TEXCOORD0;
-                float4 shadowCoord : TEXCOORD1;
+                float4 shadowCoord : TEXCOORD1; float3 positionWS : TEXCOORD2;
             };
 
             Varyings vert(Attributes input)
             {
                 Varyings output;
                 VertexPositionInputs positionInputs = GetVertexPositionInputs(input.positionOS.xyz);
-                output.positionCS = positionInputs.positionCS;
+                output.positionCS = positionInputs.positionCS; output.positionWS = positionInputs.positionWS;
                 output.normalWS = TransformObjectToWorldNormal(input.normalOS);
                 output.shadowCoord = GetShadowCoord(positionInputs);
                 return output;
@@ -45,9 +45,11 @@ Shader "Creek/Matte"
                 half bands = smoothstep(-.18h, .12h, ndotl) * .18h
                            + smoothstep(.26h, .48h, ndotl) * .22h
                            + smoothstep(.68h, .86h, ndotl) * .14h;
-                half light = (.55h + bands * lerp(.48h, 1.0h, lerp(1.0h, mainLight.shadowAttenuation, _ReceiveShadows)))
+                half light = (.55h + bands * lerp(.65h, 1.0h, lerp(1.0h, mainLight.shadowAttenuation, _ReceiveShadows)))
                            * mainLight.distanceAttenuation;
-                return half4(_Color.rgb * light * half3(1.0h, .94h, .80h), 1);
+                half3 halfDir = normalize(mainLight.direction + GetWorldSpaceNormalizeViewDir(input.positionWS));
+                half satin = pow(saturate(dot(normalize(input.normalWS), halfDir)), 18.0h) * _Sheen;
+                return half4(_Color.rgb * light * half3(1.0h, .975h, .92h) + satin * half3(1.0h, .94h, .78h), 1);
             }
             ENDHLSL
         }

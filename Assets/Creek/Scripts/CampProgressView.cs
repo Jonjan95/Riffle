@@ -9,7 +9,9 @@ namespace RiffleCreek
         readonly Transform root, firstPan, toolRack, workHelper, washHelper, catchTray, screenBasket;
         readonly Transform crank, spout, trayGold;
         readonly Transform[] toolMarks=new Transform[3];
-        readonly Material teal, brass, timber, canvas, water, gold;
+        readonly Material teal, brass, timber, canvas, water, gold, joinery;
+        readonly Vector3 spoutScale;
+        float crankDrive,waterDrive;
         public int VisibleMilestones {get;private set;}
         public bool WorkVisible => workHelper.gameObject.activeSelf;
         public bool WashVisible => washHelper.gameObject.activeSelf;
@@ -21,7 +23,8 @@ namespace RiffleCreek
             var shader=Shader.Find("Creek/Matte");
             teal=Geometry.Mat("Camp enamel","#356F6C",shader);
             brass=Geometry.Mat("Camp brass","#CEA563",shader);
-            timber=Geometry.Mat("Camp timber","#926B46",shader);
+            timber=Geometry.Mat("Camp timber","#9A7857",shader);
+            joinery=Geometry.Mat("Camp joints","#685745",shader);
             canvas=Geometry.Mat("Camp canvas","#E6AD57",shader);
             water=Geometry.Mat("Helper water","#63B2AB",Shader.Find("Creek/Water"));
             gold=Geometry.Mat("Catch tray gold","#F4C764",shader);
@@ -29,18 +32,23 @@ namespace RiffleCreek
             Shape("Small cedar crate",firstPan,PrimitiveType.Cube,Vector3.up*.22f,new Vector3(.95f,.44f,.75f),timber);
             for(int i=0;i<3;i++)Shape("Brass crate band",firstPan,PrimitiveType.Cube,new Vector3(-.38f+i*.38f,.25f,-.39f),new Vector3(.06f,.49f,.035f),brass);
             Shape("Folded marigold cloth",firstPan,PrimitiveType.Cube,new Vector3(.08f,.48f,.05f),new Vector3(.75f,.08f,.6f),canvas);
+            for(int i=0;i<2;i++)Shape("Crate slat seam",firstPan,PrimitiveType.Cube,new Vector3(0,.15f+i*.14f,-.405f),new Vector3(.92f,.018f,.014f),joinery);
+            Shape("Canvas folded edge",firstPan,PrimitiveType.Cube,new Vector3(.08f,.526f,-.21f),new Vector3(.71f,.014f,.035f),brass);
             toolRack=Group("Richer scoop / organized tools",root,new Vector3(-3.0f,.02f,3.6f));
             Shape("Tool rest",toolRack,PrimitiveType.Cube,new Vector3(0,.42f,0),new Vector3(1.1f,.10f,.5f),timber);
             for(int i=0;i<2;i++)Shape("Rack leg",toolRack,PrimitiveType.Cube,new Vector3(i==0?-.42f:.42f,.20f,0),new Vector3(.10f,.4f,.4f),timber);
             for(int i=0;i<3;i++)
             {
                 toolMarks[i]=Group("Scoop tool "+(i+1),toolRack,new Vector3(-.36f+i*.36f,.48f,0));
-                Geometry.Beam("Scoop handle",toolMarks[i],Vector3.zero,new Vector3(0,.65f,.12f),.06f,brass);
+                Geometry.Beam("Scoop handle",toolMarks[i],Vector3.zero,new Vector3(0,.65f,.12f),.06f,timber);
                 Shape("Enamel scoop",toolMarks[i],PrimitiveType.Sphere,new Vector3(0,.14f,-.1f),new Vector3(.29f,.12f,.38f),teal);
             }
             workHelper=Group("Auto Work / gentle crank",root,new Vector3(2.20f,.12f,-.7f));
             Shape("Helper base",workHelper,PrimitiveType.Cube,new Vector3(0,.13f,0),new Vector3(.82f,.26f,.95f),timber);
             Shape("Enamel housing",workHelper,PrimitiveType.Cube,new Vector3(0,.52f,0),new Vector3(.46f,.65f,.53f),teal);
+            Shape("Housing brass foot",workHelper,PrimitiveType.Cube,new Vector3(0,.24f,0),new Vector3(.53f,.055f,.59f),brass);
+            Shape("Rounded housing cap",workHelper,PrimitiveType.Sphere,new Vector3(0,.84f,0),new Vector3(.46f,.18f,.53f),teal);
+            Shape("Housing maker plate",workHelper,PrimitiveType.Cube,new Vector3(0,.55f,-.274f),new Vector3(.21f,.09f,.015f),brass);
             crank=Group("Slow brass crank",workHelper,new Vector3(-.31f,.72f,0));
             Shape("Crank disk",crank,PrimitiveType.Cylinder,Vector3.zero,new Vector3(.56f,.045f,.56f),brass,new Vector3(0,0,90));
             Shape("Crank grip",crank,PrimitiveType.Cylinder,new Vector3(-.1f,.18f,0),new Vector3(.09f,.14f,.09f),timber,new Vector3(0,0,90));
@@ -52,15 +60,27 @@ namespace RiffleCreek
             Geometry.Beam("Water spout",washHelper,new Vector3(-.28f,1.03f,0),new Vector3(-.78f,.97f,-.12f),.12f,brass);
             spout=Geometry.Beam("Visible assisted water",washHelper,new Vector3(-.78f,.97f,-.12f),new Vector3(-1.02f,.57f,-.25f),.085f,water);
             spout.GetComponent<Renderer>().shadowCastingMode=ShadowCastingMode.Off;
+            spoutScale=spout.localScale;
+            Geometry.Beam("Header cross brace",washHelper,new Vector3(-.20f,.15f,0),new Vector3(.20f,.70f,0),.055f,timber);
             catchTray=Group("Auto Collect / small catch tray",root,new Vector3(2.65f,.13f,-2.15f));
             Shape("Catch table",catchTray,PrimitiveType.Cube,new Vector3(0,.30f,0),new Vector3(1.08f,.12f,.72f),timber);
             for(int i=0;i<2;i++)Shape("Catch table leg",catchTray,PrimitiveType.Cube,new Vector3(i==0?-.42f:.42f,.12f,0),new Vector3(.1f,.25f,.5f),timber);
             Shape("Brass catch tray",catchTray,PrimitiveType.Cube,new Vector3(0,.40f,0),new Vector3(.76f,.10f,.46f),brass);
+            for(int i=0;i<2;i++)
+            {
+                Shape("Tray side rim",catchTray,PrimitiveType.Cube,new Vector3(i==0?-.38f:.38f,.48f,0),new Vector3(.035f,.075f,.49f),brass);
+                Shape("Tray end rim",catchTray,PrimitiveType.Cube,new Vector3(0,.48f,i==0?-.23f:.23f),new Vector3(.76f,.075f,.035f),brass);
+            }
             trayGold=Group("A day's little findings",catchTray,new Vector3(0,.49f,0));
             for(int i=0;i<7;i++)Shape("Caught flake",trayGold,PrimitiveType.Sphere,new Vector3(Mathf.Sin(i*2.3f)*.25f,0,Mathf.Cos(i*3.1f)*.14f),new Vector3(.09f,.035f,.075f),gold);
             screenBasket=Group("Sluice / pre-screen basket",root,new Vector3(3.65f,.08f,.40f));
             Shape("Gravel basket",screenBasket,PrimitiveType.Cube,new Vector3(0,.12f,0),new Vector3(.86f,.24f,.62f),teal);
             for(int i=0;i<5;i++)Shape("Screen crossbar",screenBasket,PrimitiveType.Cube,new Vector3(-.34f+i*.17f,.25f,0),new Vector3(.055f,.03f,.61f),brass);
+            foreach(var r in root.GetComponentsInChildren<Renderer>(true))
+            {
+                var soft=new MaterialPropertyBlock();soft.SetFloat("_ReceiveShadows",.30f);r.SetPropertyBlock(soft);
+                if(r.name.Contains("flake")||r.name.Contains("seam")||r.name.Contains("crossbar")||r.name.Contains("spout"))r.shadowCastingMode=ShadowCastingMode.Off;
+            }
         }
         static Transform Group(string name,Transform parent,Vector3 position)
         {
@@ -79,12 +99,15 @@ namespace RiffleCreek
         }
         public void Animate(PanIntent intent,bool active,float dt)
         {
-            if(workHelper.gameObject.activeSelf && active && intent.Work>0)crank.Rotate(Vector3.right,dt*90,Space.Self);
-            spout.gameObject.SetActive(washHelper.gameObject.activeSelf && active && intent.Wash>0);
+            crankDrive=Mathf.MoveTowards(crankDrive,active&&intent.Work>0?1:0,dt*6);
+            waterDrive=Mathf.MoveTowards(waterDrive,active&&intent.Wash>0?1:0,dt*8);
+            if(workHelper.gameObject.activeSelf)crank.Rotate(Vector3.right,dt*90*crankDrive,Space.Self);
+            spout.gameObject.SetActive(washHelper.gameObject.activeSelf && waterDrive>.01f);
+            spout.localScale=spoutScale*Mathf.Lerp(.75f,1,waterDrive);
         }
         public void Dispose()
         {
-            foreach(var m in new[]{teal,brass,timber,canvas,water,gold})if(m)Object.Destroy(m);
+            foreach(var m in new[]{teal,brass,timber,canvas,water,gold,joinery})if(m)Object.Destroy(m);
         }
     }
 }

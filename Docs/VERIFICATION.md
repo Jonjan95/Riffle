@@ -65,3 +65,5 @@ Builds/Windows/Riffle.exe and Builds/Riffle-Windows.zip are the playtest deliver
 ## Remaining polish
 
 The pan's harsh shadow wedges and excessively lifted high-level riffles have been corrected. Broad environment shadows, the simple water treatment and more expressive helper animation remain optional polish. Taller aspect ratios crop peripheral scenery, while keeping the pan and progression usable. No hardware performance benchmark or full-duration human playthrough is claimed.
+
+The subsequent visual pass, including current presentation checks and captures, is documented in [POLISH.md](POLISH.md).

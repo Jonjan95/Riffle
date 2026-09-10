@@ -9,7 +9,10 @@ namespace RiffleCreek
         public Material[] grainMaterials;
         readonly Transform[] grains=new Transform[PanSimulation.GrainCount];
         readonly Transform[] glints=new Transform[6];
-        Material cleanGold,glintMaterial;
+        Material cleanGold,glintMaterial,siltMaterial,riffleLight;
+        Mesh concentrateMesh, siltMesh;
+        readonly Transform[] riffleCrests=new Transform[3];
+        float revealClock; bool wasRevealed;
         Mesh glintMesh;
         float finishGlow;
         readonly Transform[] toolBadges=new Transform[3];
@@ -39,13 +42,40 @@ namespace RiffleCreek
                     new Vector3(2.86f,.70f,-.22f+i*.22f),new Vector3(.15f,.03f,.11f),grainMaterials[3]);
                 toolBadges[i].gameObject.SetActive(false);
             }
-            cleanGold=new Material(grainMaterials[3]);
+            siltMaterial=new Material(grainMaterials[0]);
+            sedimentBed.GetComponent<Renderer>().sharedMaterial=siltMaterial;
+            // Small irregularities break the perfect circular patch without altering material positions.
+            Mesh OrganicLayer(Transform layer,string name,float amount)
+            {
+                var mesh=Instantiate(layer.GetComponent<MeshFilter>().sharedMesh);mesh.name=name;
+                var vertices=mesh.vertices;
+                for(int i=0;i<vertices.Length;i++)
+                {
+                    var v=vertices[i];float angle=Mathf.Atan2(v.x,v.z);
+                    float shape=1+amount*(Mathf.Sin(angle*5+.7f)*.6f+Mathf.Cos(angle*9)*.4f);
+                    v.x*=shape;v.z*=shape;vertices[i]=v;
+                }
+                mesh.vertices=vertices;mesh.RecalculateNormals();mesh.RecalculateBounds();
+                layer.GetComponent<MeshFilter>().sharedMesh=mesh;return mesh;
+            }
+            concentrateMesh=OrganicLayer(blackBed,"Irregular black sand pocket",.09f);
+            siltMesh=OrganicLayer(sedimentBed,"Soft scoop edge",.035f);
+            riffleLight=new Material(grainMaterials[3]);riffleLight.color=new Color(.73f,.64f,.40f);riffleLight.SetFloat("_Sheen",.08f);
+            for(int i=0;i<3;i++)
+            {
+                float r=2.0f+i*.20f,y=.302f+i*.135f;
+                riffleCrests[i]=Geometry.MeshObject("Upgraded riffle satin crest",riffleAccent,
+                    Geometry.Lathe("Riffle crown",new[]{new Vector2(r+.040f,y+.003f),new Vector2(r+.010f,y)},56,-53,106),riffleLight,Vector3.zero).transform;
+                riffleCrests[i].GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
+            }
+            cleanGold=new Material(grainMaterials[3]);cleanGold.SetFloat("_Sheen",.18f);cleanGold.SetFloat("_ReceiveShadows",0);
             var root=new GameObject("Material particles • one simulation").transform;root.SetParent(transform,false);
             for(int i=0;i<grains.Length;i++)
             {
                 int kind=i<88?0:i<98?1:i<140?2:3;
                 grains[i]=Geometry.MeshObject(((MaterialKind)kind).ToString(),root,pebble,kind==3?cleanGold:grainMaterials[kind],Vector3.zero).transform;
                 grains[i].GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
+                grains[i].GetComponent<Renderer>().SetPropertyBlock(softShadows);
                 grains[i].gameObject.SetActive(false);
             }
             glintMaterial=Geometry.Mat("Soft gold glint","#FFF2BF",Shader.Find("Creek/Glow"));
@@ -62,7 +92,10 @@ namespace RiffleCreek
         public void Render(PanSimulation sim, PanIntent intent, Progression progress, float dt)
         {
             for(int i=0;i<3;i++)toolBadges[i].gameObject.SetActive(i<progress.PanLevel);
-            float working=sim.Agitation,pouring=sim.PourAmount;
+            for(int i=0;i<3;i++)riffleCrests[i].gameObject.SetActive(i<progress.RiffleLevel);
+            if(sim.Ready&&!wasRevealed)revealClock=0;
+            revealClock+=dt;wasRevealed=sim.Ready;
+            float working=sim.Ready?0:sim.Agitation,pouring=sim.Ready?0:sim.PourAmount;
             float forward=Mathf.Max(working*7,pouring*15);
             float rock=Mathf.Sin(sim.WorkPhase)*working;
             // Local -Z is the visible bottom/front. Negative X rotation lowers that lip in world Y.
@@ -72,15 +105,16 @@ namespace RiffleCreek
             ForwardTilt=Vector3.Dot(transform.TransformPoint(new Vector3(0,.8f,-2.88f))-transform.TransformPoint(new Vector3(0,.8f,2.88f)),Vector3.up);
             sedimentBed.gameObject.SetActive(sim.Loaded&&!sim.Ready&&sim.Sediment>.01f);
             float bed=Mathf.Sqrt(sim.Sediment);
-            sedimentBed.localScale=new Vector3(bed,.09f+sim.Sediment*.23f,bed*(1-sim.FrontLoad*.22f));
+            siltMaterial.color=Color.Lerp(new Color(.48f,.35f,.24f),new Color(.61f,.47f,.32f),sim.Looseness*.7f+(1-sim.Sediment)*.3f);
+            sedimentBed.localScale=new Vector3(bed,.055f+sim.Sediment*.21f,bed*(1-sim.FrontLoad*.22f));
             sedimentBed.localPosition=new Vector3(rock*.018f,.25f+Mathf.Sin(sim.WorkPhase*2)*working*.012f,-sim.FrontLoad*.55f);
             blackBed.gameObject.SetActive(sim.Loaded&&(sim.BlackSand>.025f||sim.Ready));
             blackBed.localScale=new Vector3(Mathf.Sqrt(sim.BlackSand)*Mathf.Lerp(.82f,.54f,sim.Concentration),.035f,Mathf.Sqrt(sim.BlackSand)*Mathf.Lerp(.82f,.25f,sim.Concentration));
             blackBed.localPosition=new Vector3(0,.225f,-sim.Concentration*1.50f);
             // Keep a small charcoal pocket under the revealed gold, even if the player keeps washing.
-            if(sim.Ready) {blackBed.localScale=new Vector3(.45f,.035f,.16f);blackBed.localPosition=new Vector3(0,.235f,-1.58f);}
+            if(sim.Ready) {blackBed.localScale=new Vector3(.47f,.035f,.19f);blackBed.localPosition=new Vector3(0,.235f,-1.58f);}
             finishGlow=Mathf.MoveTowards(finishGlow,sim.Ready?1:0,dt*3);
-            cleanGold.color=Color.Lerp(new Color(.79f,.60f,.22f),new Color(1,.85f,.39f),Mathf.Max(sim.GoldExposure,finishGlow));
+            cleanGold.color=Color.Lerp(new Color(.81f,.60f,.20f),new Color(1,.84f,.36f),Mathf.Max(sim.GoldExposure,finishGlow));
             waterFilm.localPosition=new Vector3(0,Mathf.Sin(Time.time*3)*.008f,0);
             DrawPour(sim,dt);
             riffleAccent.localScale=new Vector3(1,1+progress.RiffleLevel*.03f,1);
@@ -92,13 +126,16 @@ namespace RiffleCreek
                 if(!visible)continue;
                 bool gold=g.Kind==MaterialKind.Gold, heavy=g.Kind==MaterialKind.BlackSand;
                 bool stone=g.Kind==MaterialKind.Stone;
-                float layer=gold?.30f:heavy?.275f:stone?.22f+g.Size*.4f+sim.Sediment*.10f:.34f+sim.Sediment*.15f;
+                float layer=gold?.275f:heavy?.26f:stone?.22f+g.Size*.4f+sim.Sediment*.10f:.31f+sim.Sediment*.14f;
                 float ramp=Mathf.Clamp(g.Position.magnitude-1.94f,0,.94f)*.68f;
                 float falling=stone?g.Exit*g.Exit*6:g.Exit>.22f?(g.Exit-.22f)*(g.Exit-.22f)*7:0;
                 t.localPosition=new Vector3(g.Position.x,layer+ramp-falling,g.Position.y);
                 float reveal=gold?Mathf.Clamp01((.55f-sim.Sediment)*3.5f)*Mathf.Lerp(.65f,1,sim.GoldExposure):1;
                 float size=g.Size*reveal*(g.Exit>0?Mathf.Clamp01(1-g.Exit/(stone?1.1f:.65f)):1);
-                t.localScale=new Vector3(size,g.Kind==MaterialKind.Stone?size*.9f:size*.5f,size*.85f);
+                // Broad little flakes, fine charcoal grains, round stones, and shallow crumbly clods.
+                float width=heavy?.62f:gold?1.12f:stone?1:.82f;
+                float thickness=stone?.9f:gold?(g.Size>.25f?.45f:.20f):heavy?.20f:.30f;
+                t.localScale=new Vector3(size*width,size*thickness,size*width*.85f);
                 t.localRotation=Quaternion.Euler(g.Kind==MaterialKind.Stone?g.Spin:0,g.Spin,0);
                 if(gold)t.localScale*=1+finishGlow*.10f;
             }
@@ -106,7 +143,8 @@ namespace RiffleCreek
             {
                 float pulse=Mathf.Pow(Mathf.Max(0,Mathf.Sin(Time.time*2.2f+i*1.7f)),12);
                 glints[i].localPosition=grains[140+i*2].localPosition+new Vector3(.035f,.085f,.025f);
-                glints[i].localScale=Vector3.one*(sim.Loaded?finishGlow*pulse*.115f:0);
+                float firstGlint=i<2?Mathf.Sin(Mathf.Clamp01(revealClock/.48f)*Mathf.PI):0;
+                glints[i].localScale=Vector3.one*(sim.Loaded?finishGlow*Mathf.Max(pulse,firstGlint)*.15f:0);
             }
         }
 
@@ -141,7 +179,8 @@ namespace RiffleCreek
             }
         }
 
-        void OnDestroy() {if(cleanGold)Destroy(cleanGold);if(glintMaterial)Destroy(glintMaterial);if(glintMesh)Destroy(glintMesh);if(outflowMesh)Destroy(outflowMesh);}
+        void OnDestroy() {if(cleanGold)Destroy(cleanGold);if(glintMaterial)Destroy(glintMaterial);if(glintMesh)Destroy(glintMesh);if(outflowMesh)Destroy(outflowMesh);if(siltMaterial)Destroy(siltMaterial);if(riffleLight)Destroy(riffleLight);if(concentrateMesh)Destroy(concentrateMesh);if(siltMesh)Destroy(siltMesh);
+            foreach(var crest in riffleCrests)if(crest)Destroy(crest.GetComponent<MeshFilter>().sharedMesh);}
 
         public static PanView Build(Transform parent, Shader shader, Shader water)
         {

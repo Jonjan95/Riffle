@@ -8,15 +8,26 @@ namespace RiffleCreek
         public Transform[] reeds, foam, fireflies;
         public Transform sluiceFlow, wheel, lanternGlow;
         Vector3[] foamAnchors;
+        Vector3[] glintAnchors;
+        readonly Transform[] sluiceStreaks=new Transform[5];
+        Material sluiceFoam;
         public CampProgressView Camp {get;private set;}
         public void Initialize()
         {
             Camp=new CampProgressView(transform);
+            glintAnchors=new Vector3[fireflies.Length];
+            for(int i=0;i<fireflies.Length;i++)glintAnchors[i]=fireflies[i].localPosition;
+            sluiceFoam=Geometry.Mat("Sluice soft foam","#B6DDD0",Shader.Find("Creek/Matte"));
+            for(int i=0;i<sluiceStreaks.Length;i++)
+            {
+                sluiceStreaks[i]=Geometry.Shape("Moving sluice ribbon",sluiceFlow,PrimitiveType.Cube,new Vector3(0,.62f,0),new Vector3(.5f,.04f,.015f),sluiceFoam);
+                sluiceStreaks[i].GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
+            }
             foamAnchors=new Vector3[foam.Length];
             for(int i=0;i<foam.Length;i++)foamAnchors[i]=foam[i].localPosition;
         }
         public void ApplyProgress(Progression p) { Camp.Apply(p); sluiceFlow.gameObject.SetActive(p.SluiceActive); }
-        void OnDestroy() { if(Camp!=null)Camp.Dispose(); }
+        void OnDestroy() { if(Camp!=null)Camp.Dispose();if(sluiceFoam)Destroy(sluiceFoam); }
         public void Animate(Progression progress, PanIntent intent, bool processing, float dt)
         {
             bool active=progress.SluiceActive;
@@ -25,18 +36,25 @@ namespace RiffleCreek
             for(int i=0;i<reeds.Length;i++)reeds[i].localRotation=Quaternion.Euler(Mathf.Sin(t*1.2f+i)*3,0,Mathf.Sin(t*.8f+i*1.4f)*4);
             for(int i=0;i<foam.Length;i++)
             {
-                float flow=Mathf.Repeat(t*.33f+i*.79f,3);
+                float flow=Mathf.Repeat(t*.26f+i*.79f,3);
                 foam[i].localPosition=foamAnchors[i]+new Vector3(flow-1.5f,Mathf.Sin(t+i)*.007f,Mathf.Sin(t*.5f+i)*.035f);
                 float s=Mathf.Sin(flow/3*Mathf.PI);foam[i].localScale=new Vector3(.3f+s*.6f,.012f,.035f+s*.04f);
             }
             for(int i=0;i<fireflies.Length;i++)
             {
                 float s=Mathf.Pow(Mathf.Max(0,Mathf.Sin(t*1.6f+i*2.2f)),9)*.07f;
-                fireflies[i].localScale=Vector3.one*s;
+                fireflies[i].localScale=Vector3.one*s*.65f;
+                fireflies[i].localPosition=glintAnchors[i]+new Vector3(Mathf.Sin(t*.25f+i)*.12f,Mathf.Sin(t*.6f+i)*.018f,0);
             }
             sluiceFlow.gameObject.SetActive(active);
             if(active)wheel.Rotate(Vector3.right,dt*35,Space.Self);
-            lanternGlow.localScale=Vector3.one*(.17f+Mathf.Sin(t*3)*.008f);
+            for(int i=0;i<sluiceStreaks.Length;i++)
+            {
+                float travel=Mathf.Repeat(t*.24f+i*.19f,1);
+                sluiceStreaks[i].localPosition=new Vector3(Mathf.Sin(i*3.7f)*.17f,.62f,.45f-travel*.9f);
+                sluiceStreaks[i].localScale=new Vector3(.35f+Mathf.Sin(travel*Mathf.PI)*.25f,.04f,.012f);
+            }
+            lanternGlow.localScale=Vector3.one*(.19f+Mathf.Sin(t*2.4f)*.005f);
         }
 
         public static Diorama Build(Transform parent, Shader matte, Shader waterShader)
