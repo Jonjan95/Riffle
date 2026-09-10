@@ -57,3 +57,5 @@ Verification runs use unique saves under **Playtest/Verification**, never the no
 Main responsibilities remain: `PanInput` maps held controls, `PanSimulation` processes one pan, `PanAutomation` supplies ordinary intents, `CreekGame` routes actions and collection, `Progression` owns prices/unlocks, `SaveStore` handles local persistence, and `PanView` / `Diorama` / `CampProgressView` render the result.
 
 Presentation notes and before/after capture locations: [Alder Creek polish](Docs/POLISH.md).
+
+The focused pan asset pass is documented in [Signature pan](Docs/PAN_IDENTITY.md).

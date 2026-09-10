@@ -5,11 +5,11 @@ namespace RiffleCreek
     public sealed class PanView : MonoBehaviour
     {
         public Transform sedimentBed, blackBed, waterFilm, riffleAccent;
-        public Mesh pebble;
+        public Mesh pebble, goldFlake;
         public Material[] grainMaterials;
         readonly Transform[] grains=new Transform[PanSimulation.GrainCount];
         readonly Transform[] glints=new Transform[6];
-        Material cleanGold,glintMaterial,siltMaterial,riffleLight;
+        Material cleanGold,glintMaterial,siltMaterial,riffleLight,badgeMaterial;
         Mesh concentrateMesh, siltMesh;
         readonly Transform[] riffleCrests=new Transform[3];
         float revealClock; bool wasRevealed;
@@ -31,6 +31,7 @@ namespace RiffleCreek
         public void Initialize()
         {
             anchor=transform.position;
+            badgeMaterial=Geometry.Mat("Pan level brass","#DCC08A",Shader.Find("Creek/Matte"));
             // Thin layers and tiny grains should not project harsh self-shadow wedges into the bowl.
             sedimentBed.GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
             blackBed.GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
@@ -39,10 +40,10 @@ namespace RiffleCreek
             for(int i=0;i<3;i++)
             {
                 toolBadges[i]=Geometry.Shape("Pan improvement brass inlay",transform,PrimitiveType.Cube,
-                    new Vector3(2.86f,.70f,-.22f+i*.22f),new Vector3(.15f,.03f,.11f),grainMaterials[3]);
+                    new Vector3(2.94f,.88f,-.22f+i*.22f),new Vector3(.15f,.03f,.11f),badgeMaterial);
                 toolBadges[i].gameObject.SetActive(false);
             }
-            siltMaterial=new Material(grainMaterials[0]);
+            siltMaterial=new Material(sedimentBed.GetComponent<Renderer>().sharedMaterial);
             sedimentBed.GetComponent<Renderer>().sharedMaterial=siltMaterial;
             // Small irregularities break the perfect circular patch without altering material positions.
             Mesh OrganicLayer(Transform layer,string name,float amount)
@@ -60,12 +61,12 @@ namespace RiffleCreek
             }
             concentrateMesh=OrganicLayer(blackBed,"Irregular black sand pocket",.09f);
             siltMesh=OrganicLayer(sedimentBed,"Soft scoop edge",.035f);
-            riffleLight=new Material(grainMaterials[3]);riffleLight.color=new Color(.73f,.64f,.40f);riffleLight.SetFloat("_Sheen",.08f);
+            riffleLight=Geometry.Mat("Riffle crest brass","#BAA366",Shader.Find("Creek/Matte"));riffleLight.color=new Color(.73f,.64f,.40f);riffleLight.SetFloat("_Sheen",.08f);
             for(int i=0;i<3;i++)
             {
-                float r=2.0f+i*.20f,y=.302f+i*.135f;
+                float r=2.05f+i*.18f,y=.17f+(r-1.94f)*.68f+.079f;
                 riffleCrests[i]=Geometry.MeshObject("Upgraded riffle satin crest",riffleAccent,
-                    Geometry.Lathe("Riffle crown",new[]{new Vector2(r+.040f,y+.003f),new Vector2(r+.010f,y)},56,-53,106),riffleLight,Vector3.zero).transform;
+                    Geometry.Lathe("Riffle crown",new[]{new Vector2(r+.025f,y),new Vector2(r-.005f,y)},48,-47+i*2,94-i*4),riffleLight,Vector3.zero).transform;
                 riffleCrests[i].GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
             }
             cleanGold=new Material(grainMaterials[3]);cleanGold.SetFloat("_Sheen",.18f);cleanGold.SetFloat("_ReceiveShadows",0);
@@ -73,7 +74,7 @@ namespace RiffleCreek
             for(int i=0;i<grains.Length;i++)
             {
                 int kind=i<88?0:i<98?1:i<140?2:3;
-                grains[i]=Geometry.MeshObject(((MaterialKind)kind).ToString(),root,pebble,kind==3?cleanGold:grainMaterials[kind],Vector3.zero).transform;
+                grains[i]=Geometry.MeshObject(((MaterialKind)kind).ToString(),root,kind==3&&goldFlake?goldFlake:pebble,kind==3?cleanGold:grainMaterials[kind],Vector3.zero).transform;
                 grains[i].GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
                 grains[i].GetComponent<Renderer>().SetPropertyBlock(softShadows);
                 grains[i].gameObject.SetActive(false);
@@ -99,9 +100,9 @@ namespace RiffleCreek
             float forward=Mathf.Max(working*7,pouring*15);
             float rock=Mathf.Sin(sim.WorkPhase)*working;
             // Local -Z is the visible bottom/front. Negative X rotation lowers that lip in world Y.
-            var desired=Quaternion.Euler(-forward+rock*.65f,rock*.35f,Mathf.Sin(sim.WorkPhase*.8f)*working*1.1f);
+            var desired=Quaternion.Euler(-forward+rock*.95f,rock*.30f,Mathf.Sin(sim.WorkPhase*.8f)*working*1.35f);
             transform.localRotation=Quaternion.Slerp(transform.localRotation,desired,1-Mathf.Exp(-dt*9));
-            transform.position=Vector3.Lerp(transform.position,anchor+new Vector3(rock*.022f,0,-working*.055f-pouring*.035f),1-Mathf.Exp(-dt*10));
+            transform.position=Vector3.Lerp(transform.position,anchor+new Vector3(rock*.032f,0,-working*.055f-pouring*.035f),1-Mathf.Exp(-dt*10));
             ForwardTilt=Vector3.Dot(transform.TransformPoint(new Vector3(0,.8f,-2.88f))-transform.TransformPoint(new Vector3(0,.8f,2.88f)),Vector3.up);
             sedimentBed.gameObject.SetActive(sim.Loaded&&!sim.Ready&&sim.Sediment>.01f);
             float bed=Mathf.Sqrt(sim.Sediment);
@@ -115,6 +116,7 @@ namespace RiffleCreek
             if(sim.Ready) {blackBed.localScale=new Vector3(.47f,.035f,.19f);blackBed.localPosition=new Vector3(0,.235f,-1.58f);}
             finishGlow=Mathf.MoveTowards(finishGlow,sim.Ready?1:0,dt*3);
             cleanGold.color=Color.Lerp(new Color(.81f,.60f,.20f),new Color(1,.84f,.36f),Mathf.Max(sim.GoldExposure,finishGlow));
+            waterFilm.gameObject.SetActive(sim.Loaded&&!sim.Ready&&pouring>.03f);
             waterFilm.localPosition=new Vector3(0,Mathf.Sin(Time.time*3)*.008f,0);
             DrawPour(sim,dt);
             riffleAccent.localScale=new Vector3(1,1+progress.RiffleLevel*.03f,1);
@@ -179,7 +181,7 @@ namespace RiffleCreek
             }
         }
 
-        void OnDestroy() {if(cleanGold)Destroy(cleanGold);if(glintMaterial)Destroy(glintMaterial);if(glintMesh)Destroy(glintMesh);if(outflowMesh)Destroy(outflowMesh);if(siltMaterial)Destroy(siltMaterial);if(riffleLight)Destroy(riffleLight);if(concentrateMesh)Destroy(concentrateMesh);if(siltMesh)Destroy(siltMesh);
+        void OnDestroy() {if(cleanGold)Destroy(cleanGold);if(glintMaterial)Destroy(glintMaterial);if(glintMesh)Destroy(glintMesh);if(outflowMesh)Destroy(outflowMesh);if(siltMaterial)Destroy(siltMaterial);if(badgeMaterial)Destroy(badgeMaterial);if(riffleLight)Destroy(riffleLight);if(concentrateMesh)Destroy(concentrateMesh);if(siltMesh)Destroy(siltMesh);
             foreach(var crest in riffleCrests)if(crest)Destroy(crest.GetComponent<MeshFilter>().sharedMesh);}
 
         public static PanView Build(Transform parent, Shader shader, Shader water)
