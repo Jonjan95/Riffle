@@ -1,0 +1,775 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &-8904965509095078907
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder deep leaves
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.55
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.28627452, g: 0.41960785, b: 0.34509805, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!21 &-6600703923056232656
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder warm bark
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.65
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.53333336, g: 0.4392157, b: 0.34509805, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!21 &-4859710765170867234
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder distant sage
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.75
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.6156863, g: 0.6627451, b: 0.5372549, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!43 &-4400503246272290707
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Seven-sided river pebble
+  serializedVersion: 12
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 42
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 42
+    localAABB:
+      m_Center: {x: 0, y: 0.14999999, z: 0.049515545}
+      m_Extent: {x: 0.9749279, y: 0.5, z: 0.95048445}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes:
+  m_RootBoneNameHash: 0
+  m_BonesAABB: []
+  m_VariableBoneCountWeights:
+    m_Data:
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 0
+  m_KeepIndices: 0
+  m_IndexFormat: 0
+  m_IndexBuffer: 00000100020003000400050006000700080009000a000b000c000d000e000f0010001100120013001400150016001700180019001a001b001c001d001e001f002000210022002300240025002600270028002900y
+  m_VertexData:
+    serializedVersion: 3
+    m_VertexCount: 42
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 1008
+    _typelessdata: 000000006666263f000000004ff9813e429c4f3f5ef2063f00000000000000000000803f4ff9813e429c4f3f5ef2063f1c26483f00000000079d1f3f4ff9813e429c4f3f5ef2063f000000003333b3be0000000021e2203e7ca06ebff009a73e1c26483f00000000079d1f3f21e2203e7ca06ebff009a73e00000000000000000000803f21e2203e7ca06ebff009a73e000000006666263f000000003806123f429c4f3ffd50053e1c26483f00000000079d1f3f3806123f429c4f3ffd50053ee094793f0000000088dc63be3806123f429c4f3ffd50053e000000003333b3be0000000031c0b43e7ca06ebf4d05a53de094793f0000000088dc63be31c0b43e7ca06ebf4d05a53d1c26483f00000000079d1f3f31c0b43e7ca06ebf4d05a53d000000006666263f000000006e34ea3e429c4f3faac5babee094793f0000000088dc63be6e34ea3e429c4f3faac5babefe25de3e00000000e6a566bf6e34ea3e429c4f3faac5babe000000003333b3be000000006cf3903e7ca06ebf5f3067befe25de3e00000000e6a566bf6cf3903e7ca06ebf5f3067bee094793f0000000088dc63be6cf3903e7ca06ebf5f3067be000000006666263f0000000098c584b3439c4f3f94c715bffe25de3e00000000e6a566bf98c584b3439c4f3f94c715bf0326debe00000000e5a566bf98c584b3439c4f3f94c715bf000000003333b3be000000008f9b18b37da06ebf2c66b9be0326debe00000000e5a566bf8f9b18b37da06ebf2c66b9befe25de3e00000000e6a566bf8f9b18b37da06ebf2c66b9be000000006666263f000000006d34eabe439c4f3fa9c5babe0326debe00000000e5a566bf6d34eabe439c4f3fa9c5babee09479bf000000008cdc63be6d34eabe439c4f3fa9c5babe000000003333b3be000000006cf390be7da06ebf5e3067bee09479bf000000008cdc63be6cf390be7da06ebf5e3067be0326debe00000000e5a566bf6cf390be7da06ebf5e3067be000000006666263f00000000390612bf439c4f3f0351053ee09479bf000000008cdc63be390612bf439c4f3f0351053e192648bf000000000b9d1f3f390612bf439c4f3f0351053e000000003333b3be0000000032c0b4be7ca06ebf5305a53d192648bf000000000b9d1f3f32c0b4be7ca06ebf5305a53de09479bf000000008cdc63be32c0b4be7ca06ebf5305a53d000000006666263f000000004af981be439c4f3f5ff2063f192648bf000000000b9d1f3f4af981be439c4f3f5ff2063f2ebd3b34000000000000803f4af981be439c4f3f5ff2063f000000003333b3be000000001ae220be7ca06ebff109a73e2ebd3b34000000000000803f1ae220be7ca06ebff109a73e192648bf000000000b9d1f3f1ae220be7ca06ebff109a73e
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data:
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data:
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data:
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data:
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data:
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data:
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data:
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data:
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data:
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data:
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.14999999, z: 0.049515545}
+    m_Extent: {x: 0.9749279, y: 0.5, z: 0.95048445}
+  m_CookingOptions: 30
+  m_PreBakeConvexCollisionMesh: 0
+  m_PreBakeTriangleCollisionMesh: 0
+  m_BakedConvexCollisionMesh:
+  m_BakedTriangleCollisionMesh:
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1
+  m_MeshOptimizationFlags: 1
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path:
+  m_MeshLodInfo:
+    serializedVersion: 2
+    m_LodSelectionCurve:
+      serializedVersion: 1
+      m_LodSlope: 0
+      m_LodBias: 0
+    m_NumLevels: 1
+    m_SubMeshes:
+    - serializedVersion: 2
+      m_Levels:
+      - serializedVersion: 1
+        m_IndexStart: 0
+        m_IndexCount: 0
+--- !u!21 &-3905753256684659944
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder shoreline glint
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.1
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.6627451, g: 0.827451, b: 0.78039217, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!21 &-2965573445654842365
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder bank moss
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.65
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.57254905, g: 0.62352943, b: 0.47058824, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9310468be2708db4dbd521c9c35d1f5d, type: 3}
+  m_Name: EnvironmentArt
+  m_EditorClassIdentifier: Assembly-CSharp::RiffleCreek.ArtLibrary
+--- !u!21 &1610040165210876357
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder foreground grass
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.55
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.38431373, g: 0.49803922, b: 0.34901962, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!43 &2803111222766409667
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Faceted alder crown
+  serializedVersion: 12
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 396
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 84
+    localAABB:
+      m_Center: {x: 0, y: 0.07999998, z: 0.019443363}
+      m_Extent: {x: 0.9502286, y: 0.7, z: 0.94055665}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes:
+  m_RootBoneNameHash: 0
+  m_BonesAABB: []
+  m_VariableBoneCountWeights:
+    m_Data:
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 0
+  m_KeepIndices: 0
+  m_IndexFormat: 0
+  m_IndexBuffer: 000007000100010007000800010008000200020008000900020009000300030009000a0003000a00040004000a000b0004000b00050005000b000c0005000c00060006000c000d0007000e00080008000e000f0008000f00090009000f001000090010000a000a00100011000a0011000b000b00110012000b0012000c000c00120013000c0013000d000d00130014000e0015000f000f00150016000f0016001000100016001700100017001100110017001800110018001200120018001900120019001300130019001a0013001a00140014001a001b0015001c00160016001c001d0016001d00170017001d001e0017001e00180018001e001f0018001f00190019001f002000190020001a001a00200021001a0021001b001b00210022001c0023001d001d00230024001d0024001e001e00240025001e0025001f001f00250026001f002600200020002600270020002700210021002700280021002800220022002800290023002a00240024002a002b0024002b00250025002b002c0025002c00260026002c002d0026002d00270027002d002e0027002e00280028002e002f0028002f00290029002f0030002a0031002b002b00310032002b0032002c002c00320033002c0033002d002d00330034002d0034002e002e00340035002e0035002f002f00350036002f0036003000300036003700310038003200320038003900320039003300330039003a0033003a00340034003a003b0034003b00350035003b003c0035003c00360036003c003d0036003d00370037003d003e0038003f00390039003f004000390040003a003a00400041003a0041003b003b00410042003b0042003c003c00420043003c0043003d003d00430044003d0044003e003e00440045003f0046004000400046004700400047004100410047004800410048004200420048004900420049004300430049004a0043004a00440044004a004b0044004b00450045004b004c0046004d00470047004d004e0047004e00480048004e004f0048004f00490049004f005000490050004a004a00500051004a0051004b004b00510052004b0052004c004c0052005300y
+  m_VertexData:
+    serializedVersion: 3
+    m_VertexCount: 84
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 2016
+    _typelessdata: 0000000052b81ebf0000000000000000000000000000000000000000cdcc0cbf52b81e3f331f033ed60764bfab47df3e000000009a9919be8fc2753f9424833e2a3ad5bed6505f3f00000000295c8f3e1f856b3f3153893ef8b39c3ecad7693f00000000c3f5283fe17a143f09cd403ea46f3e3fa727243f0000000014ae473fec51383e5151913d71bf773f0274773e00000000a4703d3f00000000c12f82bd0266793ff3af5dbe0000000052b81ebf000000008fdb063df23e7ebf34a4e53dfa9eab3ecdcc0cbf1586053fb616733e1e7457bfe75ff83e2dde043f9a9919be18bf4e3f9c7ffe3ed4b6a2be0eb34e3fd7a9fe3e295c8f3ecd21463ff3e0033fca37ce3e79ae413f768ca03ec3f5283f92d1f93e7f56c23e57ee4a3f3c3df43e444dc73d14ae473f530f1b3e596e1f3e5498793fef76223e00000000a4703d3f00000000f59c2ebe0366793f9d4d17be0000000052b81ebf00000000d4e0b43df33e7ebf5fbb9c3d7560103fcdcc0cbf8ede833ef587ec3e1e7457bff53b8f3e188d5f3f9a9919be4f2fcc3e8ccc5a3fd4b6a2be582ed23e8d3c563f295c8f3e57adc33ed3a7573fcc37ce3ec545b73ee90f073fc3f5283f2ab9763e3cc4133f58ee4a3fdecc483ed3a9273e14ae473f7c23993df9f45d3e5598793f7aea493d00000000a4703d3f00000000d0b164be0366793f768603bd0000000052b81ebf000000806ee6ec3df33e7ebf943e883cbe1a1d3fcdcc0cbfa8b4b4bddf350a3f1f7457bfe2396cbc2e42733f9a9919beb3e60bbeb5e1703fd3b6a2be4312efbd6c1f693f295c8f3e6c1206be9cf6663fca37ce3eee021ebefcf7123fc3f5283f190ca9bd0973173f58ee4a3f6da116bea371363e14ae473f0edad1bc5303563e5598793f13119bbd00000000a4703d3f00000080c82a52be0366793fcef5bf3d0000000052b81ebf0000008039b5d93df33e7ebf04d946bdb9e7ef3ecdcc0cbf04e1cfbe8b8ce43e1f7457bf93a79bbea8bb393f9a9919be45f020bf6f7c3a3fd4b6a2bed35e1bbf81fe313f295c8f3e983b1abf1df12c3fca37ce3ea1191ebf6b6de03ec3f5283fa977c2be9618d63e58ee4a3f5f1ee3bebe4c0b3e14ae473f6968f1bd1c1f0a3e5698793feced34be00000000a4703d3f0000008081d3f9bd0366793f565e423e0000000052b81ebf000000801c65813df33e7ebfa857c9bdcddd323ecdcc0cbf6d4a18bf943a583e1f7457bf0482febe2b7a8a3e9a9919be14ce6bbfd6c3913ed6b6a2be258767bf14b5843e295c8f3ed4fa61bfdf0c703ecd37ce3e718062bf9e53273ec3f5283f2c770ebf1a47e53d58ee4a3f1e6819bf41b74f3d14ae473f90da30bee704933c5598793fb1e162be00000000a4703d3f00000080000000000366793fdc0b673e0000008052b81ebf0000008000000000f23e7ebf1256efbdcadd32becdcc0cbf6d4a18bf3b95babd1e7457bf434708bf297a8abe9a9919be14ce6bbf74717fbed6b6a2be4a2d6abf12b584be295c8f3ed4fa61bfcdf08fbecc37ce3e98fd5ebf9c5327bec3f5283f2c770ebfb74f6bbe58ee4a3f6d8c10bf3eb74fbd14ae473f90da30be2267d6bd5798793ff0cc48be00000080a4703d3f000000807fd3f93d0366793f575e423e0000008052b81ebf00000080196581bdf33e7ebfaa57c9bdb8e7efbecdcc0cbf06e1cfbe9e98babe1e7457bf1a12ccbea7bb39bf9a9919be46f020bf265434bfd4b6a2bef57922bf80fe31bf295c8f3e993b1abf641a35bfcd37ce3e7bae14bf696de0bec3f5283faa77c2bea446ffbe57ee4a3f3498b3bebe4c0bbe14ae473f6a68f1bd98be46be5598793ff6eeddbd00000080a4703d3f00000080c72a523e0266793fd1f5bf3d0000008052b81ebf0000008035b5d9bdf33e7ebf06d946bdbe1a1dbfcdcc0cbfb7b4b4bddea605bf1f7457bf5e960dbe2e4273bf9a9919bebfe60bbe268b6fbfd5b6a2be59c31cbe6c1f69bf295c8f3e771206bea8bc68bfcb37ce3e5256d9bdfcf712bfc3f5283f270ca9bd89ec1bbf57ee4a3f7926d1bca37136be14ae473f1fdad1bc0a3063be5498793fa792613c00000080a4703d3f00000080d1b1643e0166793f738603bd0000008052b81ebf0000000070e6ecbdf43e7ebf923e883c756010bfcdcc0cbf8fde833e739203bf1e7457bf6ceb293e188d5fbf9a9919be512fcc3e7bb45ebfd3b6a2be4213c13e8d3c56bf295c8f3e59adc33e7c7a52bfcc37ce3ef8f1cd3ee90f07bfc3f5283f2cb9763e86b406bf58ee4a3fd5999d3ed3a927be14ae473f7d23993d148037be5598793fe8af063e00000080a4703d3f00000000f89c2e3e0266793f9d4d17be0000008052b81ebf00000000d3e0b4bdf13e7ebf5dbb9c3dfd9eabbecdcc0cbf1486053f2a70afbe1f7457bf3dbdd53e2fde04bf9a9919be17bf4e3fbe2807bfd6b6a2beb69d493fdaa9febe295c8f3ecc21463ffcc9f2bec937ce3e5a6b483f798ca0bec3f5283f91d1f93ed86f8dbe57ee4a3f491e0b3f474dc7bd14ae473f520f1b3e151ba3bd5598793f8a83543e00000080a4703d3f00000000c12f823d0366793ff4af5dbe0000000052b81ebf0000000090db06bdf43e7ebf36a4e53dddcbe833cdcc0cbf52b81e3f301d2fbeeb714bbf8b18153fbb3a34349a9919be8fc2753f37638dbed0e14abecac2703f49b82c34295c8f3e1f856b3f187e7dbe7b70f43e40d4573ff8c6d933c3f5283fe17a143faee01cbe96d7563fae91053f0d2c073314ae473fec51383e6c3324bd29657d3fe1cd0b3e00000000a4703d3f00000000000000000000000000000000
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data:
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data:
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data:
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data:
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data:
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data:
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data:
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data:
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data:
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data:
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.07999998, z: 0.019443363}
+    m_Extent: {x: 0.9502286, y: 0.7, z: 0.94055665}
+  m_CookingOptions: 30
+  m_PreBakeConvexCollisionMesh: 0
+  m_PreBakeTriangleCollisionMesh: 0
+  m_BakedConvexCollisionMesh:
+  m_BakedTriangleCollisionMesh:
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1
+  m_MeshOptimizationFlags: 1
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path:
+  m_MeshLodInfo:
+    serializedVersion: 2
+    m_LodSelectionCurve:
+      serializedVersion: 1
+      m_LodSlope: 0
+      m_LodBias: 0
+    m_NumLevels: 1
+    m_SubMeshes:
+    - serializedVersion: 2
+      m_Levels:
+      - serializedVersion: 1
+        m_IndexStart: 0
+        m_IndexCount: 0
+--- !u!21 &3033946070675263511
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder leaves
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.48
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.39215687, g: 0.5058824, b: 0.39215687, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!21 &6092844531214850398
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder creek gravel
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.55
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.7176471, g: 0.6666667, b: 0.5176471, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!21 &6195248645287636750
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder sun leaves
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.42
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.5058824, g: 0.5921569, b: 0.46666667, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!21 &6290224621775273323
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder charcoal bark
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.7
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.35686275, g: 0.29411766, b: 0.23921569, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!21 &6385134799030352963
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder dry grass tips
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.5
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.6627451, g: 0.63529414, b: 0.40392157, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!21 &7480423344832937255
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder worn earth
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.6
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.6431373, g: 0.5764706, b: 0.4392157, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!21 &9018405323953348313
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alder damp bank
+  m_Shader: {fileID: 4800000, guid: 61a9c701da07c4b43974e1f0ecf18f40, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ReceiveShadows: 0.65
+    - _Sheen: 0
+    m_Colors:
+    - _Color: {r: 0.44313726, g: 0.5019608, b: 0.41960785, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
