@@ -8,13 +8,19 @@ namespace RiffleCreek
         public Transform[] reeds, foam, fireflies;
         public Transform sluiceFlow, wheel, lanternGlow;
         Vector3[] foamAnchors;
+        public CampProgressView Camp {get;private set;}
         public void Initialize()
         {
+            Camp=new CampProgressView(transform);
             foamAnchors=new Vector3[foam.Length];
             for(int i=0;i<foam.Length;i++)foamAnchors[i]=foam[i].localPosition;
         }
-        public void Animate(bool active, float dt)
+        public void ApplyProgress(Progression p) { Camp.Apply(p); sluiceFlow.gameObject.SetActive(p.SluiceActive); }
+        void OnDestroy() { if(Camp!=null)Camp.Dispose(); }
+        public void Animate(Progression progress, PanIntent intent, bool processing, float dt)
         {
+            bool active=progress.SluiceActive;
+            Camp.Animate(intent,processing,dt);
             float t=Time.time;
             for(int i=0;i<reeds.Length;i++)reeds[i].localRotation=Quaternion.Euler(Mathf.Sin(t*1.2f+i)*3,0,Mathf.Sin(t*.8f+i*1.4f)*4);
             for(int i=0;i<foam.Length;i++)

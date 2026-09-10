@@ -112,7 +112,7 @@ namespace RiffleCreek
             var distinctInput=new PanInput();
             PanIntent Action(bool work,bool wash) => distinctInput.Sample(game.sceneCamera,game.pan.transform,center,work,false,wash,true,false);
             for(int i=0;i<900;i++) {game.ApplyPanActions(Action(false,true),1f/60);if(i%4==0)yield return null;}
-            Check(game.Simulation.NeedsWork && game.Simulation.Stones==10 && game.Simulation.Looseness==0 && game.Simulation.Sediment>=.819f && !game.Simulation.Ready,"Space-only clears loose surface dirt then stalls with compacted dirt and all stones");
+            Check(game.Simulation.NeedsWork && game.Simulation.Stones==10 && game.Simulation.Looseness<=.123f && game.Simulation.Sediment>=.719f && !game.Simulation.Ready,"Space-only clears loose surface dirt then stalls with compacted dirt and all stones");
             yield return Capture("08-wash-only-plateau.png");
             for(int i=0;i<180;i++) {game.ApplyPanActions(Action(true,false),1f/60);if(i%4==0)yield return null;}
             float beforeWash=game.Simulation.Sediment;

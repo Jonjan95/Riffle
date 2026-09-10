@@ -18,7 +18,7 @@ $sources = @(Get-ChildItem -LiteralPath 'Assets\Creek' -Recurse -Filter '*.cs' |
 @('/nologo','/nostdlib','/target:library','/langversion:latest','/define:UNITY_EDITOR','/out:Logs/CodeCheck/Riffle.dll') + $references + $sources | Set-Content -LiteralPath 'Logs\CodeCheck\compile.rsp'
 & $mono $compiler /noconfig '@Logs/CodeCheck/compile.rsp'
 if ($LASTEXITCODE -ne 0) { throw 'Unity-reference C# compilation failed.' }
-$testSources = @('Assets/Creek/Scripts/PanInput.cs','Assets/Creek/Scripts/PanSimulation.cs','Assets/Creek/Scripts/Progression.cs','Assets/Creek/Scripts/SoftAudioSamples.cs','Assets/Creek/Editor/SimulationChecks.cs','Tools/CheckEntry.cs')
+$testSources = @('Assets/Creek/Scripts/PanInput.cs','Assets/Creek/Scripts/PanSimulation.cs','Assets/Creek/Scripts/Progression.cs','Assets/Creek/Scripts/ProgressSave.cs','Assets/Creek/Scripts/PanAutomation.cs','Assets/Creek/Editor/ProgressionChecks.cs','Assets/Creek/Scripts/SoftAudioSamples.cs','Assets/Creek/Editor/SimulationChecks.cs','Tools/CheckEntry.cs')
 @('/nologo','/nostdlib','/target:exe','/langversion:latest','/out:Logs/CodeCheck/SimulationChecks.exe') + $references + $testSources | Set-Content -LiteralPath 'Logs\CodeCheck\tests.rsp'
 & $mono $compiler /noconfig '@Logs/CodeCheck/tests.rsp'
 if ($LASTEXITCODE -ne 0) { throw 'Simulation check compilation failed.' }

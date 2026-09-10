@@ -36,6 +36,7 @@ namespace RiffleCreek
         public int Stones {get;private set;}
         public int GoldValue {get;private set;}
         public int ScoopNumber {get;private set;}
+        public bool HasNugget {get;private set;}
         public bool Loaded {get;private set;}
         bool ready;
         public bool Ready => Loaded && ready;
@@ -44,18 +45,22 @@ namespace RiffleCreek
         System.Random random=new System.Random(8124);
         float R(float a,float b) => a+(float)random.NextDouble()*(b-a);
 
-        public void Scoop(int scoopLevel)
+        public void Scoop(int scoopLevel, int completedPans = -1, bool preScreened = false)
         {
             if(Loaded)return;
             ScoopNumber++;
+            if(completedPans>=0)random=new System.Random(8124+completedPans*97);
             Sediment=1;CompactedSediment=.82f;BlackSand=1;Looseness=0;Stratification=0;Capture=0;Agitation=0;PourAmount=0;FrontLoad=0;WorkPhase=0;Stones=10;ready=false;
-            GoldValue=8+scoopLevel*3+random.Next(0,4);Loaded=true;
+            HasNugget=(completedPans>=0?completedPans+1:ScoopNumber)%20==0;
+            bool largeFlake=(completedPans>=0?completedPans+1:ScoopNumber)%6==0;
+            GoldValue=8+scoopLevel*3+random.Next(0,4)+(HasNugget?2:largeFlake?1:0);Loaded=true;
+            if(preScreened) { CompactedSediment=.72f;Looseness=1-CompactedSediment/.82f; }
             for(int i=0;i<GrainCount;i++)
             {
                 var kind=i<88?MaterialKind.Sediment:i<98?MaterialKind.Stone:i<140?MaterialKind.BlackSand:MaterialKind.Gold;
                 float a=R(0,Mathf.PI*2), r=Mathf.Sqrt(R(0,1))*1.87f;
                 Grains[i]=new Grain {Kind=kind,Active=true, Position=new Vector2(Mathf.Sin(a),Mathf.Cos(a))*r,
-                    Size=kind==MaterialKind.Stone?R(.15f,.26f):kind==MaterialKind.Gold?R(.085f,.135f):kind==MaterialKind.BlackSand?R(.055f,.10f):R(.08f,.16f),Spin=R(0,360)};
+                    Size=kind==MaterialKind.Gold && i==140 && (HasNugget||largeFlake)?(HasNugget?.29f:.21f):kind==MaterialKind.Stone?R(.15f,.26f):kind==MaterialKind.Gold?R(.085f,.135f):kind==MaterialKind.BlackSand?R(.055f,.10f):R(.08f,.16f),Spin=R(0,360)};
             }
         }
 

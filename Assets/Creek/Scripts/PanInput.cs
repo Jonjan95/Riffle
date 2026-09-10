@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace RiffleCreek
 {
-    // Device-independent held actions. A future upgrade can supply these same two values.
+    // Device-independent held actions, shared by manual input and the pan helpers.
     // Collection remains an explicit, guarded CreekGame.Collect() call.
     public struct PanIntent
     {

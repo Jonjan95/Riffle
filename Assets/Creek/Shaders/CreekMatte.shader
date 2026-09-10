@@ -1,6 +1,6 @@
 Shader "Creek/Matte"
 {
-    Properties { _Color ("Color", Color) = (1,1,1,1) }
+    Properties { _Color ("Color", Color) = (1,1,1,1) _ReceiveShadows ("Shadow softness", Range(0,1)) = 1 }
     SubShader
     {
         Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque" "Queue"="Geometry" }
@@ -17,7 +17,7 @@ Shader "Creek/Matte"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
             CBUFFER_START(UnityPerMaterial)
-                float4 _Color;
+                float4 _Color; float _ReceiveShadows;
             CBUFFER_END
 
             struct Attributes { float4 positionOS : POSITION; float3 normalOS : NORMAL; };
@@ -45,7 +45,7 @@ Shader "Creek/Matte"
                 half bands = smoothstep(-.18h, .12h, ndotl) * .18h
                            + smoothstep(.26h, .48h, ndotl) * .22h
                            + smoothstep(.68h, .86h, ndotl) * .14h;
-                half light = (.55h + bands * lerp(.48h, 1.0h, mainLight.shadowAttenuation))
+                half light = (.55h + bands * lerp(.48h, 1.0h, lerp(1.0h, mainLight.shadowAttenuation, _ReceiveShadows)))
                            * mainLight.distanceAttenuation;
                 return half4(_Color.rgb * light * half3(1.0h, .94h, .80h), 1);
             }

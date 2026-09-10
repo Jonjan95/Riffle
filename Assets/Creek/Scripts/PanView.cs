@@ -12,6 +12,7 @@ namespace RiffleCreek
         Material cleanGold,glintMaterial;
         Mesh glintMesh;
         float finishGlow;
+        readonly Transform[] toolBadges=new Transform[3];
         Vector3 anchor;
         Transform outflow;
         readonly Transform[] flowMarks=new Transform[10];
@@ -27,12 +28,24 @@ namespace RiffleCreek
         public void Initialize()
         {
             anchor=transform.position;
+            // Thin layers and tiny grains should not project harsh self-shadow wedges into the bowl.
+            sedimentBed.GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
+            blackBed.GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
+            var softShadows=new MaterialPropertyBlock();softShadows.SetFloat("_ReceiveShadows",.18f);
+            foreach(var renderer in GetComponentsInChildren<Renderer>(true))renderer.SetPropertyBlock(softShadows);
+            for(int i=0;i<3;i++)
+            {
+                toolBadges[i]=Geometry.Shape("Pan improvement brass inlay",transform,PrimitiveType.Cube,
+                    new Vector3(2.86f,.70f,-.22f+i*.22f),new Vector3(.15f,.03f,.11f),grainMaterials[3]);
+                toolBadges[i].gameObject.SetActive(false);
+            }
             cleanGold=new Material(grainMaterials[3]);
             var root=new GameObject("Material particles • one simulation").transform;root.SetParent(transform,false);
             for(int i=0;i<grains.Length;i++)
             {
                 int kind=i<88?0:i<98?1:i<140?2:3;
                 grains[i]=Geometry.MeshObject(((MaterialKind)kind).ToString(),root,pebble,kind==3?cleanGold:grainMaterials[kind],Vector3.zero).transform;
+                grains[i].GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
                 grains[i].gameObject.SetActive(false);
             }
             glintMaterial=Geometry.Mat("Soft gold glint","#FFF2BF",Shader.Find("Creek/Glow"));
@@ -48,6 +61,7 @@ namespace RiffleCreek
 
         public void Render(PanSimulation sim, PanIntent intent, Progression progress, float dt)
         {
+            for(int i=0;i<3;i++)toolBadges[i].gameObject.SetActive(i<progress.PanLevel);
             float working=sim.Agitation,pouring=sim.PourAmount;
             float forward=Mathf.Max(working*7,pouring*15);
             float rock=Mathf.Sin(sim.WorkPhase)*working;
@@ -56,22 +70,24 @@ namespace RiffleCreek
             transform.localRotation=Quaternion.Slerp(transform.localRotation,desired,1-Mathf.Exp(-dt*9));
             transform.position=Vector3.Lerp(transform.position,anchor+new Vector3(rock*.022f,0,-working*.055f-pouring*.035f),1-Mathf.Exp(-dt*10));
             ForwardTilt=Vector3.Dot(transform.TransformPoint(new Vector3(0,.8f,-2.88f))-transform.TransformPoint(new Vector3(0,.8f,2.88f)),Vector3.up);
-            sedimentBed.gameObject.SetActive(sim.Loaded&&sim.Sediment>.01f);
+            sedimentBed.gameObject.SetActive(sim.Loaded&&!sim.Ready&&sim.Sediment>.01f);
             float bed=Mathf.Sqrt(sim.Sediment);
             sedimentBed.localScale=new Vector3(bed,.09f+sim.Sediment*.23f,bed*(1-sim.FrontLoad*.22f));
             sedimentBed.localPosition=new Vector3(rock*.018f,.25f+Mathf.Sin(sim.WorkPhase*2)*working*.012f,-sim.FrontLoad*.55f);
-            blackBed.gameObject.SetActive(sim.Loaded&&sim.BlackSand>.025f);
+            blackBed.gameObject.SetActive(sim.Loaded&&(sim.BlackSand>.025f||sim.Ready));
             blackBed.localScale=new Vector3(Mathf.Sqrt(sim.BlackSand)*Mathf.Lerp(.82f,.54f,sim.Concentration),.035f,Mathf.Sqrt(sim.BlackSand)*Mathf.Lerp(.82f,.25f,sim.Concentration));
             blackBed.localPosition=new Vector3(0,.225f,-sim.Concentration*1.50f);
+            // Keep a small charcoal pocket under the revealed gold, even if the player keeps washing.
+            if(sim.Ready) {blackBed.localScale=new Vector3(.45f,.035f,.16f);blackBed.localPosition=new Vector3(0,.235f,-1.58f);}
             finishGlow=Mathf.MoveTowards(finishGlow,sim.Ready?1:0,dt*3);
             cleanGold.color=Color.Lerp(new Color(.79f,.60f,.22f),new Color(1,.85f,.39f),Mathf.Max(sim.GoldExposure,finishGlow));
             waterFilm.localPosition=new Vector3(0,Mathf.Sin(Time.time*3)*.008f,0);
             DrawPour(sim,dt);
-            riffleAccent.localScale=new Vector3(1,1+progress.RiffleLevel*.16f,1);
+            riffleAccent.localScale=new Vector3(1,1+progress.RiffleLevel*.03f,1);
             for(int i=0;i<grains.Length;i++)
             {
                 var g=sim.Grains[i];var t=grains[i];
-                bool visible=sim.Loaded && g.Active;
+                bool visible=sim.Loaded && g.Active && (!sim.Ready || g.Kind!=MaterialKind.Sediment);
                 if(t.gameObject.activeSelf!=visible)t.gameObject.SetActive(visible);
                 if(!visible)continue;
                 bool gold=g.Kind==MaterialKind.Gold, heavy=g.Kind==MaterialKind.BlackSand;
@@ -104,7 +120,7 @@ namespace RiffleCreek
 
         void DrawPour(PanSimulation sim,float dt)
         {
-            VisibleFlow=sim.Loaded?sim.PourAmount:0;flowClock+=dt;
+            VisibleFlow=sim.Loaded&&!sim.Ready?sim.PourAmount:0;flowClock+=dt;
             OutflowMouth=transform.TransformPoint(FlowPoint(.55f));OutflowEnd=transform.TransformPoint(FlowPoint(1));
             outflow.gameObject.SetActive(VisibleFlow>.015f);
             if(VisibleFlow>.015f)

@@ -43,7 +43,7 @@ namespace RiffleCreek.Editor
                 else if(p.CanBuy(2))p.Buy(2);
             }
             Check(completed==6&&p.SluiceActive,"Lifetime collection unlocks sluice despite upgrade spending");
-            p.Credit(1000);for(int j=0;j<3;j++)while(p.CanBuy(j))p.Buy(j);
+            p.Credit(5000);for(int j=0;j<3;j++)while(p.CanBuy(j))p.Buy(j);
             Check(p.PanLevel==3&&p.RiffleLevel==3&&p.ScoopLevel==3&&!p.Buy(1),"All three upgrades cap at three levels");
             var bare=new PanSimulation();var skilled=new PanSimulation();bare.Scoop(0);skilled.Scoop(0);
             for(int i=0;i<360;i++) {skilled.Step(Held(false),1f/60,0,3);bare.Step(Held(false),1f/60,0,0);}
