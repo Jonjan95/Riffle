@@ -9,13 +9,12 @@ namespace RiffleCreek
         public Material[] grainMaterials;
         readonly Transform[] grains=new Transform[PanSimulation.GrainCount];
         readonly Transform[] glints=new Transform[6];
-        Material cleanGold,glintMaterial,siltMaterial,riffleLight,badgeMaterial;
+        Material cleanGold,glintMaterial,siltMaterial,riffleLight;
         Mesh concentrateMesh, siltMesh;
         readonly Transform[] riffleCrests=new Transform[3];
         float revealClock; bool wasRevealed;
         Mesh glintMesh;
         float finishGlow;
-        readonly Transform[] toolBadges=new Transform[3];
         Vector3 anchor;
         Transform outflow;
         readonly Transform[] flowMarks=new Transform[10];
@@ -31,18 +30,11 @@ namespace RiffleCreek
         public void Initialize()
         {
             anchor=transform.position;
-            badgeMaterial=Geometry.Mat("Pan level brass","#DCC08A",Shader.Find("Creek/Matte"));
             // Thin layers and tiny grains should not project harsh self-shadow wedges into the bowl.
             sedimentBed.GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
             blackBed.GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
             var softShadows=new MaterialPropertyBlock();softShadows.SetFloat("_ReceiveShadows",.18f);
             foreach(var renderer in GetComponentsInChildren<Renderer>(true))renderer.SetPropertyBlock(softShadows);
-            for(int i=0;i<3;i++)
-            {
-                toolBadges[i]=Geometry.Shape("Pan improvement brass inlay",transform,PrimitiveType.Cube,
-                    new Vector3(2.94f,.88f,-.22f+i*.22f),new Vector3(.15f,.03f,.11f),badgeMaterial);
-                toolBadges[i].gameObject.SetActive(false);
-            }
             siltMaterial=new Material(sedimentBed.GetComponent<Renderer>().sharedMaterial);
             sedimentBed.GetComponent<Renderer>().sharedMaterial=siltMaterial;
             // Small irregularities break the perfect circular patch without altering material positions.
@@ -92,7 +84,6 @@ namespace RiffleCreek
 
         public void Render(PanSimulation sim, PanIntent intent, Progression progress, float dt)
         {
-            for(int i=0;i<3;i++)toolBadges[i].gameObject.SetActive(i<progress.PanLevel);
             for(int i=0;i<3;i++)riffleCrests[i].gameObject.SetActive(i<progress.RiffleLevel);
             if(sim.Ready&&!wasRevealed)revealClock=0;
             revealClock+=dt;wasRevealed=sim.Ready;
@@ -181,7 +172,7 @@ namespace RiffleCreek
             }
         }
 
-        void OnDestroy() {if(cleanGold)Destroy(cleanGold);if(glintMaterial)Destroy(glintMaterial);if(glintMesh)Destroy(glintMesh);if(outflowMesh)Destroy(outflowMesh);if(siltMaterial)Destroy(siltMaterial);if(badgeMaterial)Destroy(badgeMaterial);if(riffleLight)Destroy(riffleLight);if(concentrateMesh)Destroy(concentrateMesh);if(siltMesh)Destroy(siltMesh);
+        void OnDestroy() {if(cleanGold)Destroy(cleanGold);if(glintMaterial)Destroy(glintMaterial);if(glintMesh)Destroy(glintMesh);if(outflowMesh)Destroy(outflowMesh);if(siltMaterial)Destroy(siltMaterial);if(riffleLight)Destroy(riffleLight);if(concentrateMesh)Destroy(concentrateMesh);if(siltMesh)Destroy(siltMesh);
             foreach(var crest in riffleCrests)if(crest)Destroy(crest.GetComponent<MeshFilter>().sharedMesh);}
 
         public static PanView Build(Transform parent, Shader shader, Shader water)

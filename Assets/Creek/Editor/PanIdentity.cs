@@ -33,17 +33,6 @@ namespace RiffleCreek.Editor
             }
             mesh.RecalculateBounds();return mesh;
         }
-        static Mesh Grip()
-        {
-            Vector2[] outline={new Vector2(-.23f,-.46f),new Vector2(.20f,-.46f),new Vector2(.33f,-.31f),new Vector2(.33f,.31f),new Vector2(.20f,.46f),new Vector2(-.23f,.46f),new Vector2(-.32f,.31f),new Vector2(-.32f,-.31f)};
-            var verts=new List<Vector3>();var tri=new List<int>();var colors=new List<Color>();
-            for(int ring=0;ring<3;ring++)for(int i=0;i<8;i++)
-            {var p=outline[i]*(ring==2?.82f:ring==0?.92f:1);verts.Add(new Vector3(p.x,ring==0?.64f:ring==1?.76f:.85f,p.y));colors.Add(C(ring==2?"#3A7777":ring==1?"#285A60":"#1E424A"));}
-            for(int ring=0;ring<2;ring++)for(int i=0;i<8;i++) {int a=ring*8+i,b=ring*8+(i+1)%8;tri.AddRange(new[]{a,a+8,b,b,a+8,b+8});}
-            verts.Add(new Vector3(0,.85f,0));colors.Add(C("#42817D"));
-            for(int i=0;i<8;i++)tri.AddRange(new[]{24,16+(i+1)%8,16+i});
-            var mesh=Geometry.Make("Beveled enamel thumb grip",verts.ToArray(),tri.ToArray());mesh.colors=colors.ToArray();return mesh;
-        }
         static Mesh Flake()
         {
             float[] radius={1,.73f,.92f,1.08f,.70f,.88f,.76f,1.03f,.64f};
@@ -68,35 +57,19 @@ namespace RiffleCreek.Editor
             var shader=Shader.Find("Creek/PanSurface");if(!shader)throw new Exception("Pan surface shader missing");
             Material Mat(string name,string color,float sheen=0)
             {var m=Geometry.Mat(name,color,shader);m.SetFloat("_Sheen",sheen);m.SetFloat("_ReceiveShadows",.08f);return m;}
-            var enamel=Mat("Riffle signature enamel","#FFFFFF",.045f);var brass=Mat("Riffle satin brass","#FFFFFF",.09f);
+            var enamel=Mat("Riffle signature enamel","#FFFFFF",.045f);
             var shell=Group("Bowl geometry",pan.transform);var details=Group("Enamel and brass finishing",pan.transform);
             void SurfaceObject(string n,Transform p,Vector2[] profile,string[] colors,Material m,bool back=false,int segments=80,float start=0,float arc=360)
             {var cs=Array.ConvertAll(colors,C);Geometry.MeshObject(n,p,Surface(n,profile,cs,segments,start,arc,back),m,Vector3.zero);}
             SurfaceObject("Deep enamel outer skirt",shell,new[]{new Vector2(0,-.14f),new Vector2(1.98f,-.14f),new Vector2(2.80f,.57f),new Vector2(2.98f,.75f),new Vector2(2.98f,.83f)},new[]{"#1D4049","#1D4049","#28565F","#326873","#417D80"},enamel,true);
             SurfaceObject("Sculpted enamel bowl",shell,new[]{new Vector2(2.88f,.83f),new Vector2(2.75f,.77f),new Vector2(2.52f,.58f),new Vector2(2.20f,.33f),new Vector2(1.94f,.17f),new Vector2(1.82f,.17f),new Vector2(0,.17f)},new[]{"#7BB7AC","#66A69E","#4D9290","#367B80","#326F75","#418487","#529591"},enamel,true);
-            SurfaceObject("Thick rolled brass rim",shell,new[]{new Vector2(2.85f,.80f),new Vector2(2.86f,.87f),new Vector2(2.91f,.91f),new Vector2(3.00f,.88f),new Vector2(3.02f,.80f),new Vector2(2.98f,.76f)},new[]{"#9D804E","#D1B47A","#E7D29B","#CEAD71","#9C7A47","#8C7148"},brass,true);
-            var gripMesh=Grip();
-            foreach(float side in new[]{-1f,1f})
-            {
-                var grip=Geometry.MeshObject("Enamel thumb grip",details,gripMesh,enamel,new Vector3(side*2.93f,0,0)).transform;
-                if(side<0)grip.localRotation=Quaternion.Euler(0,180,0);
-                for(int i=0;i<3;i++)Geometry.Shape("Grip inset",details,PrimitiveType.Cube,new Vector3(side*2.94f,.858f,-.19f+i*.19f),new Vector3(.28f,.018f,.035f),Geometry.Mat("Grip inset rubber","#234C54",Shader.Find("Creek/Matte")));
-            }
-            // A modest maker medallion on the rear shoulder: an enamel r with a little creek underline.
-            var stamp=Group("Riffle maker stamp",details);stamp.localPosition=new Vector3(0,.71f,2.53f);stamp.localRotation=Quaternion.Euler(-38,0,0);
-            var stampMat=Geometry.Mat("Stamped pale brass","#D9C58E",Shader.Find("Creek/Matte"));
-            Geometry.MeshObject("Maker badge",stamp,Surface("Maker oval",new[]{new Vector2(.23f,0),new Vector2(0,0)},new[]{C("#34676C"),C("#34676C")},32),enamel,Vector3.zero);
-            Geometry.Beam("Maker r stem",stamp,new Vector3(-.065f,.015f,-.11f),new Vector3(-.065f,.015f,.10f),.027f,stampMat);
-            Geometry.Beam("Maker r shoulder",stamp,new Vector3(-.065f,.015f,.075f),new Vector3(.08f,.015f,.075f),.027f,stampMat);
-            Geometry.Beam("Maker r tip",stamp,new Vector3(.08f,.015f,.075f),new Vector3(.08f,.015f,.005f),.027f,stampMat);
-            Geometry.Beam("Creek underline",stamp,new Vector3(-.11f,.015f,-.16f),new Vector3(.11f,.015f,-.16f),.018f,stampMat);
+            SurfaceObject("Plain enamel edge",shell,new[]{new Vector2(2.98f,.79f),new Vector2(2.98f,.85f),new Vector2(2.92f,.855f),new Vector2(2.88f,.83f)},new[]{"#326873","#417D80","#69A69E","#7BB7AC"},enamel,true);
             pan.riffleAccent=Group("Front working riffles • 108 degree sector",pan.transform);pan.riffleAccent.localRotation=Quaternion.Euler(0,180,0);
             for(int i=0;i<4;i++)
             {
                 float r=2.05f+i*.18f,y=.17f+(r-1.94f)*.68f;
                 SurfaceObject("Sculpted front riffle "+i,pan.riffleAccent,new[]{new Vector2(r+.07f,y+.035f),new Vector2(r+.012f,y+.077f),new Vector2(r-.040f,y+.052f),new Vector2(r-.035f,y-.012f)},new[]{"#447F7F","#76AAA0","#2C6168","#214C55"},enamel,false,48,-48+i*2,96-i*4);
             }
-            for(int i=0;i<3;i++)Geometry.Shape("Front lip maker notch",details,PrimitiveType.Cube,new Vector3((i-1)*.11f,.923f,-2.915f),new Vector3(.035f,.012f,i==1?.12f:.075f),stampMat);
             pan.goldFlake=Flake();
             pan.grainMaterials[3]=Mat("Riffle flake gold","#FFD05A",.14f);
             pan.grainMaterials[0]=Mat("Riffle loose earth","#A98763");
