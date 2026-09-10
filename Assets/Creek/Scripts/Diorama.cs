@@ -131,17 +131,48 @@ namespace RiffleCreek
             Geometry.Shape("Lantern cap",land,PrimitiveType.Cylinder,lp+Vector3.up*.5f,new Vector3(.40f,.07f,.40f),iron);
             for(int i=0;i<4;i++) {float a=i*Mathf.PI*.5f;Geometry.Beam("Lantern rail",land,lp+new Vector3(Mathf.Sin(a)*.16f,0,Mathf.Cos(a)*.16f),lp+new Vector3(Mathf.Sin(a)*.16f,.5f,Mathf.Cos(a)*.16f),.035f,iron);}
             scene.lanternGlow=Geometry.Shape("Warm lantern",root,PrimitiveType.Sphere,lp+Vector3.up*.25f,Vector3.one*.17f,glow);
-            // A future equipment spot remains open beside a hand-fed sluice.
-            var sluice=new GameObject("Little sluice").transform;sluice.SetParent(land,false);sluice.localPosition=new Vector3(4.0f,.48f,2.1f);sluice.localEulerAngles=new Vector3(9,-18,0);
-            Geometry.Shape("Sluice bed",sluice,PrimitiveType.Cube,Vector3.zero,new Vector3(1.25f,.16f,2.8f),darkWood);
-            for(int i=0;i<2;i++)Geometry.Shape("Sluice wall",sluice,PrimitiveType.Cube,new Vector3(i==0?-.65f:.65f,.16f,0),new Vector3(.13f,.4f,2.9f),end);
-            for(int i=0;i<8;i++)Geometry.Shape("Sluice crossbar",sluice,PrimitiveType.Cube,new Vector3(0,.16f,-1.15f+i*.33f),new Vector3(1.2f,.10f,.075f),wood);
-            for(int i=0;i<4;i++)Geometry.Shape("Sluice leg",land,PrimitiveType.Cube,new Vector3(3.4f+i%2*1.2f,.22f,1.1f+i/2*2.2f),new Vector3(.13f,.65f,.13f),darkWood);
-            scene.sluiceFlow=Geometry.Shape("Active sluice flow",root,PrimitiveType.Cube,new Vector3(4.0f,.65f,2.1f),new Vector3(1.1f,.035f,2.75f),river,new Vector3(9,-18,0));
+            // A camp-built prospecting machine: tapered cedar, a dark riffle mat and simple forged joints.
+            var sluice=new GameObject("Camp-built cedar sluice").transform;sluice.SetParent(land,false);sluice.localPosition=new Vector3(4.0f,.48f,2.1f);sluice.localEulerAngles=new Vector3(9,-18,0);
+            var troughVerts=new[]{
+                new Vector3(-.52f,0,-1.45f),new Vector3(.52f,0,-1.45f),new Vector3(-.70f,0,1.45f),new Vector3(.70f,0,1.45f),
+                new Vector3(-.52f,-.14f,-1.45f),new Vector3(.52f,-.14f,-1.45f),new Vector3(-.70f,-.14f,1.45f),new Vector3(.70f,-.14f,1.45f)};
+            var troughTriangles=new[]{0,2,1,1,2,3,4,5,6,5,7,6,0,4,2,2,4,6,1,3,5,3,7,5,0,1,4,1,5,4,2,6,3,3,6,7};
+            Geometry.MeshObject("Tapered cedar trough",sluice,Geometry.Make("Tapered sluice bed",troughVerts,troughTriangles),wood,Vector3.zero);
+            Geometry.Shape("Dark iron riffle mat",sluice,PrimitiveType.Cube,new Vector3(0,.035f,-.06f),new Vector3(.94f,.035f,2.52f),iron);
+            for(int i=0;i<2;i++)
+            {
+                float side=i==0?-1:1;
+                Geometry.Shape("Raised cedar side rail",sluice,PrimitiveType.Cube,new Vector3(side*.61f,.18f,0),new Vector3(.13f,.36f,2.95f),i==0?darkWood:end,new Vector3(0,side*3.55f,0));
+            }
+            for(int i=0;i<8;i++)
+            {
+                float z=-1.12f+i*.31f, width=.99f+i*.035f;
+                Geometry.Shape("Pale riffle cleat",sluice,PrimitiveType.Cube,new Vector3(0,.10f,z),new Vector3(width,.075f,.065f),end);
+            }
+            Geometry.Shape("Classifier feed deck",sluice,PrimitiveType.Cube,new Vector3(0,.22f,1.48f),new Vector3(1.32f,.12f,.54f),darkWood);
+            for(int i=0;i<6;i++)Geometry.Shape("Classifier screen bar",sluice,PrimitiveType.Cube,new Vector3(-.48f+i*.19f,.30f,1.48f),new Vector3(.045f,.035f,.49f),iron);
+            for(int i=0;i<2;i++)Geometry.Shape("Classifier cedar cheek",sluice,PrimitiveType.Cube,new Vector3(i==0?-.69f:.69f,.39f,1.48f),new Vector3(.10f,.34f,.58f),wood);
+            Geometry.Shape("Sluice mouth cap",sluice,PrimitiveType.Cube,new Vector3(0,.10f,-1.48f),new Vector3(1.10f,.16f,.10f),end);
+            for(int i=0;i<2;i++)
+            {
+                float z=i==0?1.12f:3.20f;
+                Geometry.Beam("Splayed sluice trestle",land,new Vector3(3.30f,.02f,z),new Vector3(3.55f,.62f,z),.075f,darkWood);
+                Geometry.Beam("Splayed sluice trestle",land,new Vector3(4.70f,.02f,z),new Vector3(4.45f,.62f,z),.075f,darkWood);
+                Geometry.Beam("Sluice trestle cross tie",land,new Vector3(3.34f,.25f,z),new Vector3(4.66f,.25f,z),.055f,iron);
+            }
+            Geometry.Beam("Wheel axle support",land,new Vector3(4.52f,.06f,2.52f),new Vector3(4.86f,.82f,2.52f),.08f,darkWood);
+            scene.sluiceFlow=Geometry.Shape("Active sluice flow",root,PrimitiveType.Cube,new Vector3(4.0f,.65f,2.1f),new Vector3(.96f,.035f,2.62f),river,new Vector3(9,-18,0));
             scene.sluiceFlow.gameObject.SetActive(false);
-            scene.wheel=new GameObject("Sluice water wheel").transform;scene.wheel.SetParent(root,false);scene.wheel.localPosition=new Vector3(4.95f,.8f,2.5f);
-            Geometry.Shape("Wheel hub",scene.wheel,PrimitiveType.Cylinder,Vector3.zero,new Vector3(.8f,.1f,.8f),darkWood,new Vector3(0,0,90));
-            for(int i=0;i<8;i++) {float a=i*45*Mathf.Deg2Rad;Geometry.Shape("Paddle",scene.wheel,PrimitiveType.Cube,new Vector3(0,Mathf.Sin(a)*.43f,Mathf.Cos(a)*.43f),new Vector3(.42f,.16f,.27f),wood,new Vector3(-i*45,0,0));}
+            scene.wheel=new GameObject("Open cedar sluice wheel").transform;scene.wheel.SetParent(root,false);scene.wheel.localPosition=new Vector3(4.93f,.82f,2.52f);
+            var wheelRim=Geometry.MeshObject("Dark timber wheel rim",scene.wheel,Geometry.Lathe("Open wheel ring",new[]{new Vector2(.48f,-.055f),new Vector2(.59f,-.055f),new Vector2(.59f,.055f),new Vector2(.48f,.055f)},28),darkWood,Vector3.zero).transform;
+            wheelRim.localEulerAngles=new Vector3(0,0,90);
+            Geometry.Shape("Forged wheel hub",scene.wheel,PrimitiveType.Cylinder,Vector3.zero,new Vector3(.20f,.13f,.20f),iron,new Vector3(0,0,90));
+            for(int i=0;i<6;i++)
+            {
+                float a=i*60*Mathf.Deg2Rad;
+                Geometry.Beam("Cedar wheel spoke",scene.wheel,Vector3.zero,new Vector3(0,Mathf.Sin(a)*.48f,Mathf.Cos(a)*.48f),.045f,end);
+                Geometry.Shape("Scooped wheel paddle",scene.wheel,PrimitiveType.Cube,new Vector3(0,Mathf.Sin(a)*.59f,Mathf.Cos(a)*.59f),new Vector3(.34f,.12f,.25f),wood,new Vector3(-i*60,0,0));
+            }
             Geometry.Combine(scene.wheel);
             // Static grass tufts plus a modest set of centrally animated reeds.
             var swaying=new List<Transform>();

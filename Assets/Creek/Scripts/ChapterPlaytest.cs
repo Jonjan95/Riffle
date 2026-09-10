@@ -14,6 +14,12 @@ namespace RiffleCreek
         readonly StringBuilder report=new StringBuilder();
         int failures;
         void Check(bool valid,string label) { report.AppendLine((valid?"PASS: ":"FAIL: ")+label);if(!valid)failures++; }
+        bool HasActivePart(string name)
+        {
+            foreach(var part in game.GetComponentsInChildren<Transform>(true))
+                if(part.name==name && part.gameObject.activeInHierarchy)return true;
+            return false;
+        }
         IEnumerator Start()
         {
             game=GetComponent<CreekGame>();game.VerificationDrive=true;
@@ -101,6 +107,8 @@ namespace RiffleCreek
             string saved=SaveStore.Encode(game.Progress);
             Check(game.ReloadSaveForVerification()&&SaveStore.Encode(game.Progress)==saved,"Runtime save/load restores earned progression and helper toggles");
             Check(game.diorama.Camp.VisibleMilestones==6&&game.diorama.sluiceFlow.gameObject.activeSelf,"Loaded save restores all six camp milestones and sluice flow");
+            Check(HasActivePart("Tapered cedar trough")&&HasActivePart("Open cedar sluice wheel"),"Authored cedar sluice and open wheel remain present in the playable scene");
+            Check(HasActivePart("Turning flywheel")&&HasActivePart("Enamel header tank")&&HasActivePart("Recessed enamel catch"),"All three authored helper silhouettes are active in the completed camp");
             game.ToggleAutomation(0);game.ToggleAutomation(1);
             for(int i=0;i<60;i++)game.TickActions(default,.05f);
             yield return Capture("07-complete-camp.png");
