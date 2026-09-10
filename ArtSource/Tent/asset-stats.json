@@ -1,0 +1,19 @@
+{
+  "blender": "5.2.1 LTS",
+  "vertices": 833,
+  "triangles": 1413,
+  "materials": [
+    "CanvasSun",
+    "Canvas",
+    "Binding",
+    "Interior",
+    "Rope",
+    "Cedar"
+  ],
+  "dimensions_m": [
+    3.738,
+    2.637,
+    1.987
+  ],
+  "source_parts": 63
+}

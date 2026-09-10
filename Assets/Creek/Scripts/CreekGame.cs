@@ -36,8 +36,9 @@ namespace RiffleCreek
             bool smoke=Array.IndexOf(args,"--smoke-test")>=0;
             bool chapter=Array.IndexOf(args,"--progression-check")>=0;
             bool environmentCheck=Array.IndexOf(args,"--environment-check")>=0;
-            VerificationMode=smoke || chapter || environmentCheck || Array.IndexOf(args,"--input-check")>=0;
-            VerificationDrive=smoke || chapter || environmentCheck;
+            bool tentCheck=Array.IndexOf(args,"--tent-check")>=0;
+            VerificationMode=smoke || chapter || environmentCheck || tentCheck || Array.IndexOf(args,"--input-check")>=0;
+            VerificationDrive=smoke || chapter || environmentCheck || tentCheck;
             string path=VerificationMode ? Path.GetFullPath(Path.Combine(Application.dataPath,"../../../Playtest/Verification/"+Guid.NewGuid().ToString("N")+"/progress.txt"))
                 : Path.Combine(Application.persistentDataPath,"alder-creek-v1.txt");
             save=new SaveStore(path); Progress=save.Load(); Simulation=new PanSimulation();
@@ -51,6 +52,7 @@ namespace RiffleCreek
             if(smoke)gameObject.AddComponent<SmokePlaytest>();
             if(chapter)gameObject.AddComponent<ChapterPlaytest>();
             if(environmentCheck)gameObject.AddComponent<EnvironmentPlaytest>();
+            if(tentCheck)gameObject.AddComponent<TentPlaytest>();
             if(Array.IndexOf(args,"--input-check")>=0)gameObject.AddComponent<InputProbe>();
         }
         void Update()
